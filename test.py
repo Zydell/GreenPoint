@@ -24,8 +24,11 @@ class Stack:
 
 # Example usage:
 stack = Stack()
-stack.sort_and_push('XD')
-stack.sort_and_push('DSA')
+stack.sort_and_push('juan')
+stack.sort_and_push('mariano')
+stack.sort_and_push('arabic')
+stack.sort_and_push('peter')
+
 
 while stack.stack:
     print(stack.pop())
