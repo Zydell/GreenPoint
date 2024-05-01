@@ -3,5 +3,5 @@ GreePoint se presenta como una solución tecnológica innovadora para abordar la
 
 **Integrantes:**
 * Anderson Allaica - 7071
-* Alexis de la Cruz - 
+* Alexis de la Cruz - 6853
 * Cristhian Totoy - 7064
