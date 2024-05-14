@@ -1,0 +1,22 @@
+<mxfile host="app.diagrams.net" modified="2024-05-14T14:49:21.987Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" etag="XqF3UCk_gDmy8cR1HqA5" version="24.3.1" type="device">
+  <diagram name="Página-1" id="bv2PWhdMY495QyxUX6iD">
+    <mxGraphModel dx="1615" dy="857" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="gJbxYdYzpoIjI85zEcFn-1" value="Green Point" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="250" y="90" width="850" height="1120" as="geometry" />
+        </mxCell>
+        <mxCell id="gJbxYdYzpoIjI85zEcFn-2" value="Administrador" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="150" y="280" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gJbxYdYzpoIjI85zEcFn-3" value="Negocio" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="310" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="gJbxYdYzpoIjI85zEcFn-6" value="Ciudadanos" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="160" y="660" width="30" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
