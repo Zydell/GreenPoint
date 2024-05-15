@@ -1,20 +1,32 @@
-<mxfile host="app.diagrams.net" modified="2024-05-14T14:49:21.987Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" etag="XqF3UCk_gDmy8cR1HqA5" version="24.3.1" type="device">
+<mxfile host="Electron" modified="2024-05-15T17:17:18.971Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.0.3 Chrome/114.0.5735.289 Electron/25.8.4 Safari/537.36" etag="zSWmOYlsTKZC7P8_I-m_" version="22.0.3" type="device">
   <diagram name="Página-1" id="bv2PWhdMY495QyxUX6iD">
-    <mxGraphModel dx="1615" dy="857" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="714" dy="418" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="gJbxYdYzpoIjI85zEcFn-1" value="Green Point" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="gJbxYdYzpoIjI85zEcFn-1" value="Green Point" style="swimlane;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="250" y="90" width="850" height="1120" as="geometry" />
         </mxCell>
-        <mxCell id="gJbxYdYzpoIjI85zEcFn-2" value="Administrador" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+        <mxCell id="-pQ9CePt9vmjvepH147P-1" value="Registrar negocio" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="gJbxYdYzpoIjI85zEcFn-1">
+          <mxGeometry x="270" y="170" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="-pQ9CePt9vmjvepH147P-2" value="Registrar cuenta" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="gJbxYdYzpoIjI85zEcFn-1">
+          <mxGeometry x="200" y="660" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="-pQ9CePt9vmjvepH147P-4" value="Registrar cuenta" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="gJbxYdYzpoIjI85zEcFn-1">
+          <mxGeometry x="210" y="540" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gJbxYdYzpoIjI85zEcFn-2" value="Administrador" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
           <mxGeometry x="150" y="280" width="30" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="gJbxYdYzpoIjI85zEcFn-3" value="Negocio" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+        <mxCell id="gJbxYdYzpoIjI85zEcFn-3" value="Negocio" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
           <mxGeometry x="1160" y="310" width="30" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="gJbxYdYzpoIjI85zEcFn-6" value="Ciudadanos" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
-          <mxGeometry x="160" y="660" width="30" height="60" as="geometry" />
+        <mxCell id="-pQ9CePt9vmjvepH147P-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="gJbxYdYzpoIjI85zEcFn-6" target="-pQ9CePt9vmjvepH147P-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="gJbxYdYzpoIjI85zEcFn-6" value="Ciudadano" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="1" vertex="1">
+          <mxGeometry x="150" y="760" width="30" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
