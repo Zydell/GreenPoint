@@ -5,11 +5,7 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true
       },
-      nombre: {
-        type: DataTypes.STRING(100),
-        allowNull: false
-      },
-      encargado: {
+      descripcion: {
         type: DataTypes.STRING(100),
         allowNull: false
       },
@@ -17,14 +13,18 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(200),
         allowNull: false
       },
-      telefono: {
-        type: DataTypes.CHAR(10),
+      latitud: {
+        type: DataTypes.DOUBLE,
         allowNull: false
       },
-      capacidad: {
+      longitud: {
+        type: DataTypes.DOUBLE,
+        allowNull: false
+      },
+      negocio_id: {
         type: DataTypes.INTEGER,
         allowNull: false
-      }
+      },
     }, {
       tableName: 'tb_puntos_verdes',
       timestamps: false
