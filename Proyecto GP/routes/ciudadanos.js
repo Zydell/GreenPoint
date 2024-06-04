@@ -5,7 +5,7 @@ const db = require('../models');
 // Get all 
 router.get('/', async (req, res) => {
   try {
-    const ciudadanos = await db.tb_ciudadanos.findAll();
+    const ciudadanos = await db.tb_ciudadano.findAll();
     res.status(200).json(ciudadanos);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 // Create a new 
 router.post('/', async (req, res) => {
   try {
-    const ciudadanos = await db.tb_ciudadanos.create(req.body);
+    const ciudadanos = await db.tb_ciudadano.create(req.body);
     res.status(201).json(ciudadanos);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
 // Get an  by id
 router.get('/:id', async (req, res) => {
   try {
-    const ciudadanos = await db.tb_ciudadanos.findByPk(req.params.id);
+    const ciudadanos = await db.tb_ciudadano.findByPk(req.params.id);
     if (ciudadanos) {
       res.status(200).json(ciudadanos);
     } else {
@@ -39,7 +39,7 @@ router.get('/:id', async (req, res) => {
 // Update an  by id
 router.put('/:id', async (req, res) => {
   try {
-    const ciudadanos = await db.tb_ciudadanos.findByPk(req.params.id);
+    const ciudadanos = await db.tb_ciudadano.findByPk(req.params.id);
     if (ciudadanos) {
       await ciudadanos.update(req.body);
       res.status(200).json(ciudadanos);
@@ -54,7 +54,7 @@ router.put('/:id', async (req, res) => {
 // Delete an  by id
 router.delete('/:id', async (req, res) => {
   try {
-    const ciudadanos = await db.tb_ciudadanos.findByPk(req.params.id);
+    const ciudadanos = await db.tb_ciudadano.findByPk(req.params.id);
     if (ciudadanos) {
       await ciudadanos.destroy();
       res.status(204).json();

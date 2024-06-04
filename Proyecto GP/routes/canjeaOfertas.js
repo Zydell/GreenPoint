@@ -5,7 +5,7 @@ const db = require('../models');
 // Get all 
 router.get('/', async (req, res) => {
   try {
-    const canjeaofertas = await db.tb_canjea_ofertas.findAll();
+    const canjeaofertas = await db.tb_canjea_oferta.findAll();
     res.status(200).json(canjeaofertas);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 // Create a new 
 router.post('/', async (req, res) => {
   try {
-    const canjeaofertas = await db.tb_canjea_ofertas.create(req.body);
+    const canjeaofertas = await db.tb_canjea_oferta.create(req.body);
     res.status(201).json(canjeaofertas);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
 // Get an  by id
 router.get('/:id', async (req, res) => {
   try {
-    const canjeaofertas = await db.tb_canjea_ofertas.findByPk(req.params.id);
+    const canjeaofertas = await db.tb_canjea_oferta.findByPk(req.params.id);
     if (canjeaofertas) {
       res.status(200).json(canjeaofertas);
     } else {
@@ -39,7 +39,7 @@ router.get('/:id', async (req, res) => {
 // Update an  by id
 router.put('/:id', async (req, res) => {
   try {
-    const canjeaofertas = await db.tb_canjea_ofertas.findByPk(req.params.id);
+    const canjeaofertas = await db.tb_canjea_oferta.findByPk(req.params.id);
     if (canjeaofertas) {
       await canjeaofertas.update(req.body);
       res.status(200).json(canjeaofertas);
@@ -54,7 +54,7 @@ router.put('/:id', async (req, res) => {
 // Delete an  by id
 router.delete('/:id', async (req, res) => {
   try {
-    const canjeaofertas = await db.tb_canjea_ofertas.findByPk(req.params.id);
+    const canjeaofertas = await db.tb_canjea_oferta.findByPk(req.params.id);
     if (canjeaofertas) {
       await canjeaofertas.destroy();
       res.status(204).json();
