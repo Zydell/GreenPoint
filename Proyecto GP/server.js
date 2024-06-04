@@ -13,13 +13,24 @@ app.use(bodyParser.json());
 const negocioRoutes = require('./routes/negocioRoutes');
 const ofertaRoutes = require('./routes/ofertaRoutes');
 const credencialRoutes = require('./routes/credencialRoutes');
-//const puntoVerdeRoutes = require('./routes/puntoVerdeRoutes');
+const puntoVerdeRoutes = require('./routes/puntoVerdeRoutes');
 
 app.use('/api/negocios', negocioRoutes);
 app.use('/api/ofertas', ofertaRoutes);
 app.use('/api/credenciales', credencialRoutes);
-//app.use('/api/puntos_verdes', puntoVerdeRoutes);
+app.use('/api/puntos_verdes', puntoVerdeRoutes);
+app.use('/api/admins', require('./routes/admins'));
+app.use('/api/canjea_ofertas', require('./routes/canjeaOfertas'));
+app.use('/api/ciudadanos', require('./routes/ciudadanos'));
+app.use('/api/greecoins', require('./routes/greecoins'));
+app.use('/api/historial', require('./routes/historiales'));
+app.use('/api/historial_negocios', require('./routes/historialNegocios'));
+app.use('/api/materiales', require('./routes/materiales'));
+app.use('/api/reciclajes', require('./routes/reciclajes'));
+app.use('/api/registro_reciclaje', require('./routes/registroReciclajeRoutes'));
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
