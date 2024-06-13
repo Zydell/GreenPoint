@@ -12,6 +12,14 @@ module.exports = (sequelize, DataTypes) => {
       valor_por_libra: {
         type: DataTypes.INTEGER,
         allowNull: false
+      },
+      estado: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
+      fechacreacion: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
       }
     }, {
       tableName: 'tb_materiales',

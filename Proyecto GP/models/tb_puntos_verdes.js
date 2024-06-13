@@ -25,6 +25,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false
       },
+      estado: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
+      fechacreacion: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      },
     }, {
       tableName: 'tb_puntos_verdes',
       timestamps: false
