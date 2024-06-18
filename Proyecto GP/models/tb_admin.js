@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
       punto_verde_id: DataTypes.INTEGER,
       negocio_id: DataTypes.INTEGER,
       nombre: DataTypes.STRING(25),
-      correo: DataTypes.STRING(50),
-      password: DataTypes.STRING(25)
+      //correo: DataTypes.STRING(50),
+      //password: DataTypes.STRING(25)
     }, {
       tableName: 'tb_admin',
       timestamps: false

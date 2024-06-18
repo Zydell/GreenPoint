@@ -24,16 +24,16 @@ module.exports = (sequelize, DataTypes) => {
       },
       fecharegistro: {
         type: DataTypes.DATE,
-        allowNull: false
+        defaultValue: DataTypes.NOW,
       },
       estado: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
-      fechacreacion: {
+      /*fechacreacion: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
-      }
+      }*/
     }, {
       tableName: 'tb_ciudadano',
       timestamps: false

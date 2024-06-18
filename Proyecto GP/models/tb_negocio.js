@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       tipo_negocio: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING(100),
         allowNull: false
       },
       direccion: {
@@ -41,7 +41,9 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'tb_negocio',
       timestamps: false
     });
-  
+    Negocio.associate = models => {
+      Negocio.hasOne(models.tb_credenciales, { foreignKey: 'usuario_id', as: 'credencial', constraints: false });
+    };
     return Negocio;
   };
   
