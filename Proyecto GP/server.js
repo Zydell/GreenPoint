@@ -24,7 +24,6 @@ passport.use(new Strategy(jwtOptions, async (jwt_payload, done) => {
   try {
     // Aquí puedes agregar la lógica para buscar al usuario por su id
     // por ejemplo: const user = await User.findById(jwt_payload.id);
-    //const user = await User.findById(jwt_payload.id);
     return done(null, jwt_payload);
   } catch (error) {
     return done(error, false);
