@@ -17,7 +17,15 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false
       },
-      usuario_id: DataTypes.INTEGER
+      usuario_id: DataTypes.INTEGER,
+      estado: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
+      fechacreacion: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+      }
     }, {
       tableName: 'tb_credenciales',
       timestamps: false

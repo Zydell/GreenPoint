@@ -24,6 +24,14 @@ module.exports = (sequelize, DataTypes) => {
       fecha_fin: {
         type: DataTypes.DATE,
         allowNull: false
+      },
+      estado: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
+      fechacreacion: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
       }
     }, {
       tableName: 'tb_ofertas',
