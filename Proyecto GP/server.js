@@ -37,6 +37,7 @@ app.use(passport.initialize());
 app.use('/api/auth', authRoutes);
 app.use('/api/protected', passport.authenticate('jwt', { session: false }), (req, res) => {
   res.json({ message: 'Acceso a la Ruta protegida' });
+});
 app.use('/api/negocios', require('./routes/negocioRoutes'));
 app.use('/api/ofertas', require('./routes/ofertaRoutes'));
 app.use('/api/credenciales', require('./routes/credencialRoutes'));
@@ -50,7 +51,6 @@ app.use('/api/historial_negocios', require('./routes/historialNegocios'));
 app.use('/api/materiales', require('./routes/materiales'));
 app.use('/api/reciclajes', require('./routes/reciclajes'));
 app.use('/api/registro_reciclaje', require('./routes/registroReciclajeRoutes'));
-});
 
 
 app.listen(PORT, () => {
