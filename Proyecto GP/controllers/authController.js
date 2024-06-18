@@ -2,11 +2,20 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { tb_credenciales, tb_ciudadano, tb_negocio, tb_admin } = require('../models');
 
+// Verificar si el correo ya existe
+const emailExists = async (correo_electronico) => {
+    const existingUser = await tb_credenciales.findOne({ where: { correo_electronico } });
+    return !!existingUser;
+};
+
 // Registro de Ciudadano
 exports.registerCiudadano = async (req, res) => {
     try {
         const { nombre, apellido, telefono, fecha_nac, correo_electronico, contrasena } = req.body;
 
+        if (await emailExists(correo_electronico)) {
+            return res.status(400).json({ message: 'El correo ya está registrado.' });
+        }
         // Encriptar contraseña
         const hashedPassword = await bcrypt.hash(contrasena, 10);
 
@@ -38,7 +47,10 @@ exports.registerCiudadano = async (req, res) => {
 exports.registerNegocio = async (req, res) => {
     try {
         const { nombre, propietario, tipo_negocio, direccion, telefono, correo_electronico, contrasena } = req.body;
-
+        
+        if (await emailExists(correo_electronico)) {
+            return res.status(400).json({ message: 'El correo ya está registrado.' });
+        }
         // Encriptar contraseña
         const hashedPassword = await bcrypt.hash(contrasena, 10);
 
@@ -71,6 +83,9 @@ exports.registerAdmin = async (req, res) => {
     try {
         const { nombre, correo_electronico, contrasena } = req.body;
 
+        if (await emailExists(correo_electronico)) {
+            return res.status(400).json({ message: 'El correo ya está registrado.' });
+        }
         // Encriptar contraseña
         const hashedPassword = await bcrypt.hash(contrasena, 10);
 
