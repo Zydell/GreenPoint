@@ -21,7 +21,7 @@ exports.registrarReciclaje = async (req, res) => {
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
-        /*
+        
         // Verificar si el ciudadano, negocio y punto verde existen
         const [ciudadan, negocio, puntov] = await Promise.all([
             tb_ciudadano.findByPk(ciudadano_id),
@@ -32,8 +32,8 @@ exports.registrarReciclaje = async (req, res) => {
         if (!ciudadan || !negocio || !puntov) {
             return res.status(404).json({ error: 'Ciudadano, negocio o punto verde no encontrado' });
         }
-        */
         
+        /*
         // Verificar si el ciudadano, negocio y punto verde existen
         const ciudadan = await tb_ciudadano.findByPk(ciudadano_id);
         const negocio = await tb_negocio.findByPk(negocio_id);
@@ -42,7 +42,7 @@ exports.registrarReciclaje = async (req, res) => {
         if (!ciudadan || !negocio || !puntov) {
             return res.status(404).json({ error: 'Ciudadano, negocio o punto verde no encontrado '});
         }
-
+        */
         // Obtener el valor_por_libra del material
         const material = await tb_materiales.findByPk(material_id);
         if (!material) {
@@ -99,11 +99,13 @@ exports.obtenerHistorialCiudadano = async (req, res) => {
     try {
         const { ciudadano_id } = req.params;
 
-        const historial = await tb_reciclaje.findAll({
+        const historial = await tb_historial_cdn.findAll({
             where: { ciudadano_id },
+            attributes: ['fecha', 'greencoins_obtenidos'],
             include: [
-                { model: tb_negocio, as: 'negocio' },
-                { model: tb_puntos_verdes, as: 'puntov' }
+                { model: tb_puntos_verdes, attributes: ['direccion']},
+                { model: tb_negocio, attributes: ['nombre', 'propietario', 'telefono']},
+                { model: tb_ciudadano, attributes: ['nombre', 'telefono']}
             ]
         });
 
@@ -118,11 +120,12 @@ exports.obtenerHistorialNegocio = async (req, res) => {
     try {
         const { negocio_id } = req.params;
 
-        const historial = await tb_reciclaje.findAll({
+        const historial = await tb_historial_negocio.findAll({
             where: { negocio_id },
+            attributes: ['ciudadano_id', 'punto_verde_id', 'reciclaje_id', 'cantidad', 'greencoins_obtenidos', 'fecha'],
             include: [
-                { model: tb_ciudadano, as: 'ciudadano' },
-                { model: tb_puntos_verdes, as: 'puntov' }
+                { model: tb_puntos_verdes, as: 'puntov' },
+                { model: tb_materiales, as: 'material' }
             ]
         });
 
