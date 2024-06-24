@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         allowNull: false
       },
-      green_coins_obtenidos: {
+      greencoins_obtenidos: {
         type: DataTypes.INTEGER,
         allowNull: false
       }

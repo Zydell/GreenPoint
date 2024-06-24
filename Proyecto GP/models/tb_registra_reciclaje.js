@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       punto_verde_id: DataTypes.INTEGER,
       reciclaje_id: DataTypes.INTEGER,
       ciudadano_id: DataTypes.INTEGER,
+      negocio_id: DataTypes.INTEGER,
       cantidad: {
         type: DataTypes.FLOAT,
         allowNull: false
@@ -25,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       RegistraReciclaje.belongsTo(models.tb_puntos_verdes, { foreignKey: 'punto_verde_id' });
       RegistraReciclaje.belongsTo(models.tb_reciclaje, { foreignKey: 'reciclaje_id' });
       RegistraReciclaje.belongsTo(models.tb_ciudadano, { foreignKey: 'ciudadano_id' });
+      RegistraReciclaje.belongsTo(models.tb_negocio, { foreignKey: 'negocio_id' });
     };
   
     return RegistraReciclaje;
