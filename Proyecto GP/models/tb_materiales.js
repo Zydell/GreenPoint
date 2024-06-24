@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'tb_materiales',
       timestamps: false
     });
-  
+    
     return Materiales;
   };
   

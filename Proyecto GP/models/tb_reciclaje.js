@@ -5,12 +5,12 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true
       },
-      nombre: {
-        type: DataTypes.STRING(100),
+      cantidad: {
+        type: DataTypes.FLOAT,
         allowNull: false
       },
-      tipo: {
-        type: DataTypes.STRING(100),
+      material_id: {
+        type: DataTypes.INTEGER,
         allowNull: false
       },
       descripcion: {
@@ -21,7 +21,9 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'tb_reciclaje',
       timestamps: false
     });
-  
+    Reciclaje.associate = function(models) {
+      Reciclaje.belongsTo(models.tb_materiales, { foreignKey: 'material_id', as: 'materiales'});
+    };
     return Reciclaje;
   };
   
