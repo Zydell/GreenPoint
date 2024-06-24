@@ -41,9 +41,10 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'tb_negocio',
       timestamps: false
     });
+    /*
     Negocio.associate = models => {
       Negocio.hasOne(models.tb_credenciales, { foreignKey: 'usuario_id', as: 'credencial', constraints: false });
-    };
+    };*/
     return Negocio;
   };
   

@@ -1,37 +1,55 @@
-const { tb_reciclaje, tb_ciudadano, tb_negocio, tb_puntos_verdes, tb_registra_reciclaje, tb_materiales, tb_credenciales } = require('../models');
+const { tb_historial_cdn, tb_historial_negocio, tb_reciclaje, tb_ciudadano, tb_negocio, tb_puntos_verdes, tb_registra_reciclaje, tb_materiales, tb_credenciales } = require('../models');
 
 // Registrar reciclaje
 exports.registrarReciclaje = async (req, res) => {
     try {
-        const { correo, negocio_id, punto_verde_id, cantidad, fecha, material_id } = req.body;
+        const { correo_electronico, negocio_id, punto_verde_id, cantidad, material_id, descripcion } = req.body;
         let ciudadano_id = null;
+
         // Buscar el ciudadano en la tabla tb_credenciales
         try {
-            // Buscar el correo electrónico en la tabla tb_credenciales
             const credencial = await tb_credenciales.findOne({
-                where: { correo }
+                where: { correo_electronico }
             });
     
             if (credencial) {
-                // Si se encuentra una coincidencia, devolver el id
                 ciudadano_id = credencial.credencial_id;
-                //res.json({ ciudadano_id: credencial.usuario_id });
             } else {
                 // Si no se encuentra, devolver un mensaje indicando que no se encontró
-                res.status(404).json({ message: 'Correo electrónico no encontrado' });
+                return res.status(404).json({ message: 'Correo electrónico no encontrado' });
             }
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            return res.status(500).json({ error: error.message });
         }
+        /*
+        // Verificar si el ciudadano, negocio y punto verde existen
+        const [ciudadan, negocio, puntov] = await Promise.all([
+            tb_ciudadano.findByPk(ciudadano_id),
+            tb_negocio.findByPk(negocio_id),
+            tb_puntos_verdes.findByPk(punto_verde_id)
+        ]);
 
+        if (!ciudadan || !negocio || !puntov) {
+            return res.status(404).json({ error: 'Ciudadano, negocio o punto verde no encontrado' });
+        }
+        */
+        
         // Verificar si el ciudadano, negocio y punto verde existen
         const ciudadan = await tb_ciudadano.findByPk(ciudadano_id);
         const negocio = await tb_negocio.findByPk(negocio_id);
         const puntov = await tb_puntos_verdes.findByPk(punto_verde_id);
 
         if (!ciudadan || !negocio || !puntov) {
-            return res.status(404).json({ error: 'Ciudadano, negocio o punto verde no encontrado' });
+            return res.status(404).json({ error: 'Ciudadano, negocio o punto verde no encontrado '});
         }
+
+        // Obtener el valor_por_libra del material
+        const material = await tb_materiales.findByPk(material_id);
+        if (!material) {
+            return res.status(404).json({ error: 'Material no encontrado' });
+        }
+        const valor_por_libra = material.valor_por_libra;
+
 
         // Crear el reciclaje
         const reciclaje = await tb_reciclaje.create({
@@ -39,6 +57,7 @@ exports.registrarReciclaje = async (req, res) => {
             material_id,
             descripcion
         });
+
         // Crear el registro de reciclaje
         const reg_reciclaje = await tb_registra_reciclaje.create({
             ciudadano_id,
@@ -46,29 +65,26 @@ exports.registrarReciclaje = async (req, res) => {
             punto_verde_id,
             reciclaje_id: reciclaje.reciclaje_id,
             cantidad,
-            fecha: fecha || new Date()
         });
 
          const gc_obtenidos = cantidad * valor_por_libra;
         
         // Crear el historial del ciudadano
-        await tb_registra_reciclaje.create({
+        await tb_historial_cdn.create({
             ciudadano_id: reg_reciclaje.ciudadano_id,
             punto_verde_id: reg_reciclaje.punto_verde_id,
             reciclaje_id: reciclaje.reciclaje_id,
             cantidad: reciclaje.cantidad,
-            fecha: fecha || new Date(),
-            green_coins_obtenidos: gc_obtenidos
+            greencoins_obtenidos: gc_obtenidos
         });
 
         // Crear el historial del negocio
-        await tb_registra_reciclaje.create({
+        await tb_historial_negocio.create({
             //ciudadano_id,     VERIFICAR SI TAL VEZ SERIA NECESARIO
             negocio_id: reg_reciclaje.negocio_id,
             punto_verde_id: reg_reciclaje.punto_verde_id,
             reciclaje_id: reciclaje.reciclaje_id,
-            cantidad: reciclaje.cantidad,
-            fecha: fecha || new Date()
+            cantidad: reciclaje.cantidad
         });
         
 

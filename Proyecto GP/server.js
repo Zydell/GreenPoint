@@ -3,9 +3,12 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const db = require('./models'); // Asegúrate de que el archivo de modelos está bien configurado
 const passport = require('passport');
+
+
 const authRoutes = require('./routes/auth');
 const passportJWT = require('passport-jwt');
 const { Strategy, ExtractJwt } = passportJWT;
+const reciclajeRoutes = require('./routes/reciclajeRoutes');
 
 //require('./config/passport')(passport);
 
@@ -33,6 +36,7 @@ passport.use(new Strategy(jwtOptions, async (jwt_payload, done) => {
 app.use(passport.initialize());
 
 // Incluir rutas CRUD
+app.use('/api/reciclaje', reciclajeRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/protected', passport.authenticate('jwt', { session: false }), (req, res) => {
   res.json({ message: 'Acceso a la Ruta protegida' });
