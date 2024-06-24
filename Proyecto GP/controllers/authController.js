@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { tb_credenciales, tb_ciudadano, tb_negocio, tb_admin } = require('../models');
+const { tb_credenciales, tb_ciudadano, tb_negocio, tb_admin, tb_greencoin_cdn } = require('../models');
 
 // Verificar si el correo ya existe
 const emailExists = async (correo_electronico) => {
@@ -18,6 +18,13 @@ exports.registerCiudadano = async (req, res) => {
         }
         // Encriptar contraseña
         const hashedPassword = await bcrypt.hash(contrasena, 10);
+        
+        // Crear greencoin
+        const greencoin = await tb_greencoin_cdn.create({
+            registro_id: null,
+            total: 0,
+            canjeo_id: null
+        });
 
         // Crear ciudadano
         const ciudadano = await tb_ciudadano.create({
@@ -26,7 +33,7 @@ exports.registerCiudadano = async (req, res) => {
             telefono,
             fecha_nac,
             fecharegistro: new Date(),
-            greencoin_id: null
+            greencoin_id: greencoin.greencoin_id
         });
 
         // Crear registro de credenciales
