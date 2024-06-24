@@ -32,10 +32,9 @@ module.exports = (sequelize, DataTypes) => {
     });
   
     Credenciales.associate = function(models) {
-      //Credenciales.belongsTo(models.tb_ciudadano, { foreignKey: 'usuario_id', as: 'ciudadano', constraints: false });
-      Credenciales.belongsTo(models.tb_ciudadano, { foreignKey: 'usuario_id', as: 'ciudadano' });
-      Credenciales.belongsTo(models.tb_negocio, { foreignKey: 'usuario_id', as: 'negocio' });
-      Credenciales.belongsTo(models.tb_admin, { foreignKey: 'usuario_id', as: 'admin' });
+      Credenciales.belongsTo(models.tb_ciudadano, { foreignKey: 'usuario_id', as: 'ciudadano', constraints: false  });
+      Credenciales.belongsTo(models.tb_negocio, { foreignKey: 'usuario_id', as: 'negocio', constraints: false  });
+      Credenciales.belongsTo(models.tb_admin, { foreignKey: 'usuario_id', as: 'admin', constraints: false  });
     };
   
     return Credenciales;

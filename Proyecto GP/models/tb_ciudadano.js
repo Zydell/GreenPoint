@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     });
   
     Ciudadano.associate = function(models) {
-      Ciudadano.belongsTo(models.tb_greencoin_cdn, { foreignKey: 'greencoin_id' });
+      Ciudadano.belongsTo(models.tb_greencoin_cdn, { foreignKey: 'greencoin_id'});
     };
   
     return Ciudadano;

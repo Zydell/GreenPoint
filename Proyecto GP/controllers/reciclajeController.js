@@ -1,4 +1,4 @@
-const { tb_historial_cdn, tb_historial_negocio, tb_reciclaje, tb_ciudadano, tb_negocio, tb_puntos_verdes, tb_registra_reciclaje, tb_materiales, tb_credenciales } = require('../models');
+const { tb_historiales, tb_reciclaje, tb_ciudadano, tb_negocio, tb_puntos_verdes, tb_registra_reciclaje, tb_materiales, tb_credenciales } = require('../models');
 
 // Registrar reciclaje
 exports.registrarReciclaje = async (req, res) => {
@@ -38,10 +38,6 @@ exports.registrarReciclaje = async (req, res) => {
         const ciudadan = await tb_ciudadano.findByPk(ciudadano_id);
         const negocio = await tb_negocio.findByPk(negocio_id);
         const puntov = await tb_puntos_verdes.findByPk(punto_verde_id);
-
-        if (!ciudadan || !negocio || !puntov) {
-            return res.status(404).json({ error: 'Ciudadano, negocio o punto verde no encontrado '});
-        }
         */
         // Obtener el valor_por_libra del material
         const material = await tb_materiales.findByPk(material_id);
@@ -68,7 +64,18 @@ exports.registrarReciclaje = async (req, res) => {
         });
 
          const gc_obtenidos = cantidad * valor_por_libra;
-        
+
+        // Crear los historiales
+        await tb_historiales.create({
+            ciudadano_id: reg_reciclaje.ciudadano_id,
+            punto_verde_id: reg_reciclaje.punto_verde_id,
+            reciclaje_id: reciclaje.reciclaje_id,
+            cantidad: reciclaje.cantidad,
+            negocio_id: reg_reciclaje.negocio_id,
+            greencoins_obtenidos: gc_obtenidos
+        });
+
+        /*
         // Crear el historial del ciudadano
         await tb_historial_cdn.create({
             ciudadano_id: reg_reciclaje.ciudadano_id,
@@ -86,7 +93,7 @@ exports.registrarReciclaje = async (req, res) => {
             reciclaje_id: reciclaje.reciclaje_id,
             cantidad: reciclaje.cantidad
         });
-        
+        */
 
         res.status(201).json({ message: 'Reciclaje registrado exitosamente', reciclaje });
     } catch (error) {
@@ -99,7 +106,7 @@ exports.obtenerHistorialCiudadano = async (req, res) => {
     try {
         const { ciudadano_id } = req.params;
 
-        const historial = await tb_historial_cdn.findAll({
+        const historial = await tb_historiales.findAll({
             where: { ciudadano_id },
             attributes: ['fecha', 'greencoins_obtenidos'],
             include: [
@@ -120,12 +127,13 @@ exports.obtenerHistorialNegocio = async (req, res) => {
     try {
         const { negocio_id } = req.params;
 
-        const historial = await tb_historial_negocio.findAll({
+        const historial = await tb_historiales.findAll({
             where: { negocio_id },
-            attributes: ['ciudadano_id', 'punto_verde_id', 'reciclaje_id', 'cantidad', 'greencoins_obtenidos', 'fecha'],
+            attributes: ['fecha', 'greencoins_obtenidos'],
             include: [
-                { model: tb_puntos_verdes, as: 'puntov' },
-                { model: tb_materiales, as: 'material' }
+                { model: tb_puntos_verdes, attributes: ['direccion']},
+                { model: tb_negocio, attributes: ['nombre', 'propietario', 'telefono']},
+                { model: tb_ciudadano, attributes: ['nombre', 'telefono']}
             ]
         });
 

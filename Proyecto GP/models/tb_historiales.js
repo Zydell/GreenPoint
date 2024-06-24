@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    const HistorialCdn = sequelize.define('tb_historial_cdn', {
+    const Historiales = sequelize.define('tb_historiales', {
       historial_id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       ciudadano_id: DataTypes.INTEGER,
       punto_verde_id: DataTypes.INTEGER,
       reciclaje_id: DataTypes.INTEGER,
+      negocio_id: DataTypes.INTEGER,
       cantidad: {
         type: DataTypes.FLOAT,
         allowNull: false
@@ -21,16 +22,17 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       }
     }, {
-      tableName: 'tb_historial_cdn',
+      tableName: 'tb_historiales',
       timestamps: false
     });
   
-    HistorialCdn.associate = function(models) {
-      HistorialCdn.belongsTo(models.tb_ciudadano, { foreignKey: 'ciudadano_id' });
-      HistorialCdn.belongsTo(models.tb_puntos_verdes, { foreignKey: 'punto_verde_id' });
-      HistorialCdn.belongsTo(models.tb_reciclaje, { foreignKey: 'reciclaje_id' });
+    Historiales.associate = function(models) {
+      Historiales.belongsTo(models.tb_ciudadano, { foreignKey: 'ciudadano_id' });
+      Historiales.belongsTo(models.tb_puntos_verdes, { foreignKey: 'punto_verde_id' });
+      Historiales.belongsTo(models.tb_reciclaje, { foreignKey: 'reciclaje_id' });
+      Historiales.belongsTo(models.tb_negocio, { foreignKey: 'negocio_id' });
     };
   
-    return HistorialCdn;
+    return Historiales;
   };
   

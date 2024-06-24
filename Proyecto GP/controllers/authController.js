@@ -21,9 +21,9 @@ exports.registerCiudadano = async (req, res) => {
         
         // Crear greencoin
         const greencoin = await tb_greencoin_cdn.create({
-            registro_id: 0,
+            registro_id: null,
             total: 0,
-            canjeo_id: 0
+            canjeo_id: null
         });
 
         // Crear ciudadano
