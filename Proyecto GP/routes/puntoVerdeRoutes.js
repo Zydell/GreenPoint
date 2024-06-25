@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../models');
-const { verificarUbicacionChimborazo, verificarExistenciaNegocio } = require('../controllers/geoLocationController');
 const geoLocationController = require('../controllers/geoLocationController');
 // Get all 
 router.get('/', async (req, res) => {

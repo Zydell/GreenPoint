@@ -1,12 +1,11 @@
-const { tb_puntos_verdes, tb_canjea_oferta, tb_ciudadano, tb_codigos_canje, tb_greencoin_cdn, tb_registra_reciclaje, tb_materiales, tb_credenciales } = require('../models');
-const { verificarUbicacionChimborazo, verificarExistenciaNegocio } = require('../services/geoLocationService');
+const { verificarUbicacionChimborazo, verificarExistenciaNegocio, verificarProximidadPuntoVerde } = require('../services/geoLocationService');
 
 // Controlador para agregar un nuevo punto verde
 exports.agregarPuntoVerde = async (req, res) => {
     const { descripcion, direccion, latitud, longitud, negocio_id } = req.body;
 
-    try {/*
-        // Verificar si las coordenadas están dentro de Chimborazo
+    try {
+        // Verificar si las coordenadas están dentro de Ecuador
         const estaEnChimborazo = await verificarUbicacionChimborazo(latitud, longitud);
         if (!estaEnChimborazo) {
             return res.status(400).json({ error: 'Las coordenadas no están dentro de Chimborazo' });
@@ -16,7 +15,13 @@ exports.agregarPuntoVerde = async (req, res) => {
         const negocioExistente = await verificarExistenciaNegocio(negocio_id);
         if (!negocioExistente) {
             return res.status(400).json({ error: 'El negocio con el negocio_id proporcionado no existe' });
-        }*/
+        }
+
+        // Verificar si ya existe un punto verde en un radio de 5 metros
+        const existeProximidad = await verificarProximidadPuntoVerde(latitud, longitud);
+        if (existeProximidad) {
+            return res.status(400).json({ error: 'Ya existe un punto verde en un radio de 5 metros' });
+        }
 
         // Crear el punto verde en la base de datos
         const nuevoPuntoVerde = await tb_puntos_verdes.create({
@@ -57,6 +62,12 @@ exports.actualizarPuntoVerde = async (req, res) => {
         if (!negocioExistente) {
             return res.status(400).json({ error: 'El negocio con el negocio_id proporcionado no existe' });
         }
+
+        // Verificar si ya existe un punto verde en un radio de 5 metros
+        const existeProximidad = await verificarProximidadPuntoVerde(latitud, longitud);
+        if (existeProximidad) {
+            return res.status(400).json({ error: 'Ya existe un punto verde en un radio de 5 metros' });
+        } 
 
         // Actualizar el punto verde en la base de datos
         puntoVerde = await puntoVerde.update({
