@@ -57,7 +57,7 @@ app.use('/api/historial_negocios', require('./routes/historialNegocios'));
 app.use('/api/materiales', require('./routes/materiales'));
 app.use('/api/reciclajes', require('./routes/reciclajes'));
 app.use('/api/registro_reciclaje', require('./routes/registroReciclajeRoutes'));
-
+// Ruta para las operaciones con GreenCoins
 app.use('/api/ofertas_greencoins', operaciones);
 
 app.use('/api/notificaciones', notificationRoutes);
