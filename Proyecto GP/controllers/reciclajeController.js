@@ -14,7 +14,7 @@ exports.registrarReciclaje = async (req, res) => {
             });
     
             if (credencial) {
-                ciudadano_id = credencial.credencial_id;
+                ciudadano_id = credencial.usuario_id;
             } else {
                 // Si no se encuentra, devolver un mensaje indicando que no se encontró
                 return res.status(404).json({ message: 'Correo electrónico no encontrado' });

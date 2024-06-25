@@ -1,4 +1,5 @@
-const { tb_historiales, tb_reciclaje, tb_ciudadano, tb_negocio, tb_puntos_verdes, tb_registra_reciclaje, tb_materiales, tb_credenciales } = require('../models');
+const { tb_ofertas, tb_canjea_oferta, tb_ciudadano, tb_codigos_canje, tb_greencoin_cdn, tb_registra_reciclaje, tb_materiales, tb_credenciales } = require('../models');
+const { v4: uuidv4 } = require('uuid');
 
 /* Canjear oferta usando greencoins
 exports.canjearOferta = async (req, res) => {
@@ -125,14 +126,36 @@ exports.canjearOferta = async (req, res) => {
             return res.status(404).json({ message: 'Correo electrónico no encontrado' });
         }
 
-        ciudadano_id = credencial.credencial_id;
+        ciudadano_id = credencial.usuario_id;
 
         // Verificar si el ciudadano existe
         const ciudadano = await tb_ciudadano.findByPk(ciudadano_id);
+        //const greenc = await tb_greencoin_cdn.findByPk(ciudadano_id);
         if (!ciudadano) {
             return res.status(404).json({ error: 'Ciudadano no encontrado' });
         }
 
+        /*
+        // Buscar el ciudadano en la tabla tb_credenciales
+        try {
+            const ciu_id = await tb_ciudadano.findOne({
+                where: { greencoin_id }
+            });
+    
+            if (ciu_id) {
+                greenc = credencial.credencial_id;
+            } else {
+                // Si no se encuentra, devolver un mensaje indicando que no se encontró
+                return res.status(404).json({ message: 'Correo electrónico no encontrado' });
+            }
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+        */
+        let greencoin_id = ciudadano.greencoin_id
+        const greenc = await tb_greencoin_cdn.findOne({
+            where: { greencoin_id }
+        });
         // Obtener la oferta
         const oferta = await tb_ofertas.findByPk(ofertas_id);
         if (!oferta) {
@@ -140,24 +163,28 @@ exports.canjearOferta = async (req, res) => {
         }
 
         // Verificar si el ciudadano tiene suficientes greencoins
-        if (ciudadano.greencoins < oferta.gc_necesarios) {
+        if (greenc.total < oferta.gc_necesarios) {
             return res.status(400).json({ error: 'No tienes suficientes greencoins' });
         }
 
-        // Reducir los greencoins del ciudadano
-        ciudadano.greencoins -= oferta.gc_necesarios;
-        await ciudadano.save();
 
         // Generar un código de canje único
         const codigo = uuidv4();
 
         // Crear el canjeo de oferta
-        await tb_canjea_oferta.create({
+        const canjea = await tb_canjea_oferta.create({
             ofertas_id,
             ciudadano_id,
             fecha: new Date(),
             estado: 'canjeada'
         });
+
+        // Reducir los greencoins del ciudadano
+        const newTotal = greenc.total - oferta.gc_necesarios;
+            await tb_greencoin_cdn.update(
+                { total: newTotal, canjeo_id: canjea.canjeo_id },
+                { where: { greencoin_id: ciudadano.greencoin_id } }
+            );
 
         // Almacenar el código de canje en la tabla tb_codigos_canje
         await tb_codigos_canje.create({

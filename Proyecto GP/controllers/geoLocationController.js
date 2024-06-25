@@ -1,10 +1,11 @@
+const { tb_puntos_verdes, tb_canjea_oferta, tb_ciudadano, tb_codigos_canje, tb_greencoin_cdn, tb_registra_reciclaje, tb_materiales, tb_credenciales } = require('../models');
 const { verificarUbicacionChimborazo, verificarExistenciaNegocio } = require('../services/geoLocationService');
 
 // Controlador para agregar un nuevo punto verde
 exports.agregarPuntoVerde = async (req, res) => {
     const { descripcion, direccion, latitud, longitud, negocio_id } = req.body;
 
-    try {
+    try {/*
         // Verificar si las coordenadas están dentro de Chimborazo
         const estaEnChimborazo = await verificarUbicacionChimborazo(latitud, longitud);
         if (!estaEnChimborazo) {
@@ -15,10 +16,10 @@ exports.agregarPuntoVerde = async (req, res) => {
         const negocioExistente = await verificarExistenciaNegocio(negocio_id);
         if (!negocioExistente) {
             return res.status(400).json({ error: 'El negocio con el negocio_id proporcionado no existe' });
-        }
+        }*/
 
         // Crear el punto verde en la base de datos
-        const nuevoPuntoVerde = await db.tb_puntos_verdes.create({
+        const nuevoPuntoVerde = await tb_puntos_verdes.create({
             descripcion,
             direccion,
             latitud,
@@ -40,7 +41,7 @@ exports.actualizarPuntoVerde = async (req, res) => {
 
     try {
         // Verificar si el punto verde existe
-        let puntoVerde = await db.tb_puntos_verdes.findByPk(id);
+        let puntoVerde = await tb_puntos_verdes.findByPk(id);
         if (!puntoVerde) {
             return res.status(404).json({ message: 'Punto verde no encontrado' });
         }
