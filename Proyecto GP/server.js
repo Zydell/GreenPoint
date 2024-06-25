@@ -9,6 +9,7 @@ const authRoutes = require('./routes/auth');
 const passportJWT = require('passport-jwt');
 const { Strategy, ExtractJwt } = passportJWT;
 const reciclajeRoutes = require('./routes/reciclajeRoutes');
+const operaciones = require('./routes/operaciones');
 
 //require('./config/passport')(passport);
 
@@ -55,6 +56,7 @@ app.use('/api/materiales', require('./routes/materiales'));
 app.use('/api/reciclajes', require('./routes/reciclajes'));
 app.use('/api/registro_reciclaje', require('./routes/registroReciclajeRoutes'));
 
+app.use('/api/ofertas_greencoins', operaciones);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
