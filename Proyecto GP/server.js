@@ -5,11 +5,13 @@ const db = require('./models'); // Asegúrate de que el archivo de modelos está
 const passport = require('passport');
 
 
+
 const authRoutes = require('./routes/auth');
 const passportJWT = require('passport-jwt');
 const { Strategy, ExtractJwt } = passportJWT;
 const reciclajeRoutes = require('./routes/reciclajeRoutes');
 const operaciones = require('./routes/operaciones');
+const notificationRoutes = require('./routes/notificationRoutes'); // Importar rutas de notificaciones
 
 //require('./config/passport')(passport);
 
@@ -57,6 +59,8 @@ app.use('/api/reciclajes', require('./routes/reciclajes'));
 app.use('/api/registro_reciclaje', require('./routes/registroReciclajeRoutes'));
 
 app.use('/api/ofertas_greencoins', operaciones);
+
+app.use('/api/notificaciones', notificationRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

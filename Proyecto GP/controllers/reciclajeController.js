@@ -1,4 +1,5 @@
 const { tb_greencoin_cdn, tb_historiales, tb_reciclaje, tb_ciudadano, tb_negocio, tb_puntos_verdes, tb_registra_reciclaje, tb_materiales, tb_credenciales } = require('../models');
+const notificationService = require('../services/notificationService');
 
 // Registrar reciclaje
 exports.registrarReciclaje = async (req, res) => {
@@ -106,6 +107,48 @@ exports.registrarReciclaje = async (req, res) => {
             cantidad: reciclaje.cantidad
         });
         */
+
+        // Enviar notificación al correo al ciudadano
+            /*
+            const nodemailer = require('nodemailer');
+
+            // Configurar el transportador de correo electrónico
+            const transporter = nodemailer.createTransport({
+                service: 'Gmail', // o el servicio que uses
+                auth: {
+                    user: 'your-email@gmail.com',
+                    pass: 'your-email-password'
+                }
+            });
+
+        const mailOptions = {
+            from: 'your-email@gmail.com',
+            to: correo_electronico,
+            subject: 'Registro de reciclaje exitoso',
+            text: `Hola ${ciudadan.nombre},
+            Has registrado un reciclaje exitosamente en el punto verde: ${puntov.nombre}.
+            Materiales: ${material.nombre}
+            Cantidad: ${cantidad} libras
+            GreenCoins obtenidos: ${gc_obtenidos}
+
+            ¡Gracias por contribuir al reciclaje!
+            `
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error('Error al enviar el correo electrónico:', error);
+            } else {
+                console.log('Correo electrónico enviado:', info.response);
+            }
+        });*/
+
+         // Agregar notificación al servicio de notificaciones
+         const notificacionMensaje = {
+            titulo: 'Registro de reciclaje exitoso',
+            mensaje: `Has registrado un reciclaje exitosamente en el punto verde: ${negocio.nombre}. Material: ${material.nombre}, Cantidad: ${cantidad} libras, GreenCoins obtenidos: ${gc_obtenidos}`
+        };
+        notificationService.addNotification(ciudadano_id, notificacionMensaje);
 
         res.status(201).json({ message: 'Reciclaje registrado exitosamente', reciclaje });
     } catch (error) {

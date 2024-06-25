@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { tb_credenciales, tb_ciudadano, tb_negocio, tb_admin, tb_greencoin_cdn } = require('../models');
+const notificationService = require('../services/notificationService');
+
 
 // Verificar si el correo ya existe
 const emailExists = async (correo_electronico) => {
@@ -132,6 +134,7 @@ exports.login = async (req, res) => {
 
         // Generar token
         const token = jwt.sign({ id: credencial.credencial_id, tipousuario: credencial.tipousuario }, 'secret', { expiresIn: '1h' });
+        const notificaciones = notificationService.getNotifications(user.credencial_id);
 
         res.json({ token });
     } catch (error) {

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../models');
-
+const { verificarUbicacionChimborazo, verificarExistenciaNegocio } = require('../controllers/geoLocationController');
 // Get all 
 router.get('/', async (req, res) => {
   try {
@@ -13,6 +13,7 @@ router.get('/', async (req, res) => {
 });
 
 // Create a new 
+/*
 router.post('/', async (req, res) => {
   try {
     const puntosverdes = await db.tb_puntos_verdes.create(req.body);
@@ -20,7 +21,9 @@ router.post('/', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
+});*/
+router.post('/', geoLocationController.agregarPuntoVerde);
+
 
 // Get an  by id
 router.get('/:id', async (req, res) => {
@@ -37,6 +40,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update an  by id
+/*
 router.put('/:id', async (req, res) => {
   try {
     const puntosverdes = await db.tb_puntos_verdes.findByPk(req.params.id);
@@ -49,7 +53,9 @@ router.put('/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
+});*/
+router.put('/:id', geoLocationController.actualizarPuntoVerde);
+
 
 // Delete an  by id
 router.delete('/:id', async (req, res) => {
