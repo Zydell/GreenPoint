@@ -10,6 +10,18 @@ const emailExists = async (correo_electronico) => {
     return !!existingUser;
 };
 
+// Calcular la edad a partir de la fecha de nacimiento
+const calculateAge = (fecha_nac) => {
+    const birthDate = new Date(fecha_nac);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDifference = today.getMonth() - birthDate.getMonth();
+    if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+};
+
 // Registro de Ciudadano
 exports.registerCiudadano = async (req, res) => {
     try {
@@ -18,6 +30,13 @@ exports.registerCiudadano = async (req, res) => {
         if (await emailExists(correo_electronico)) {
             return res.status(400).json({ message: 'El correo ya está registrado.' });
         }
+
+        // Verificar si el usuario es mayor de edad
+        const age = calculateAge(fecha_nac);
+        if (age < 18) {
+            return res.status(400).json({ message: 'Debe ser mayor de 18 años para registrarse.' });
+        }
+
         // Encriptar contraseña
         const hashedPassword = await bcrypt.hash(contrasena, 10);
         
