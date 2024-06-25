@@ -1,4 +1,4 @@
-const { tb_historiales, tb_reciclaje, tb_ciudadano, tb_negocio, tb_puntos_verdes, tb_registra_reciclaje, tb_materiales, tb_credenciales } = require('../models');
+const { tb_greencoin_cdn, tb_historiales, tb_reciclaje, tb_ciudadano, tb_negocio, tb_puntos_verdes, tb_registra_reciclaje, tb_materiales, tb_credenciales } = require('../models');
 
 // Registrar reciclaje
 exports.registrarReciclaje = async (req, res) => {
@@ -75,6 +75,18 @@ exports.registrarReciclaje = async (req, res) => {
             greencoins_obtenidos: gc_obtenidos
         });
 
+        // Actualizar el estado de greencoins
+        const greencoinRecord = await tb_greencoin_cdn.findOne({
+            where: { greencoin_id: ciudadan.greencoin_id }
+        });
+
+        const newTotal = greencoinRecord.total + gc_obtenidos;
+            await tb_greencoin_cdn.update(
+                { total: newTotal, registro_id: reciclaje.reciclaje_id },
+                { where: { greencoin_id: ciudadan.greencoin_id } }
+            );
+
+        //console.log('\nVERIFICAR EL VALOR: '+newTotal);
         /*
         // Crear el historial del ciudadano
         await tb_historial_cdn.create({
