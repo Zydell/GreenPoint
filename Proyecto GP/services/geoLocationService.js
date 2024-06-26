@@ -1,17 +1,40 @@
 //geoLocationService.js
 const axios = require('axios');
 const db = require('../models');
+const xml2js = require('xml2js');
 
-// Función para verificar si las coordenadas están dentro de Chimborazo
+/* Función para verificar si las coordenadas están dentro de Chimborazo
 async function verificarUbicacionChimborazo(latitud, longitud) {
     try {
         const username = 'admingreen'; // Reemplazar con tu nombre de usuario de GeoNames
         const pais = 'Ecuador'; // Reemplazar con la provincia deseada
         const response = await axios.get(`http://api.geonames.org/countrySubdivision?lat=${latitud}&lng=${longitud}&username=${username}`);
-
         // Verificar la respuesta y obtener el nombre de la provincia
         const data = response.data;
+        console.log(data);
         if (data.countryName === pais) {
+            return true; // Está dentro de la provincia de Chimborazo
+        } else {
+            return false; // No está dentro de la provincia de Chimborazo
+        }
+    } catch (error) {
+        console.error('Error al verificar ubicación:', error);
+        return false; // En caso de error, asumimos que no está en Chimborazo
+    }
+}*/
+
+async function verificarUbicacionChimborazo(latitud, longitud) {
+    try {
+        const username = 'admingreen'; // Reemplazar con tu nombre de usuario de GeoNames
+        const pais = 'Ecuador'; // Reemplazar con la provincia deseada
+        const response = await axios.get(`http://api.geonames.org/countrySubdivision?lat=${latitud}&lng=${longitud}&username=${username}`);
+        
+        const parser = new xml2js.Parser();
+        const data = await parser.parseStringPromise(response.data);
+
+        // Verifica la estructura del objeto data para extraer countryName
+        const countryName = data.geonames.countrySubdivision[0].countryName[0];
+        if (countryName === pais) {
             return true; // Está dentro de la provincia de Chimborazo
         } else {
             return false; // No está dentro de la provincia de Chimborazo
@@ -34,7 +57,7 @@ async function verificarExistenciaNegocio(negocio_id) {
 }
 
 // Función para verificar si ya existe un punto verde en un radio de 5 metros
-async function verificarProximidadPuntoVerde(latitud, longitud, radio = 5) {
+async function verificarProximidadPuntoVerde(latitud, longitud, radio = 15) {
     try {
         const puntosVerdes = await db.tb_puntos_verdes.findAll();
         

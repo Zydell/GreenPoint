@@ -1,3 +1,4 @@
+const { tb_greencoin_cdn, tb_historiales, tb_reciclaje, tb_ciudadano, tb_negocio, tb_puntos_verdes, tb_registra_reciclaje, tb_materiales, tb_credenciales } = require('../models');
 const { verificarUbicacionChimborazo, verificarExistenciaNegocio, verificarProximidadPuntoVerde } = require('../services/geoLocationService');
 
 // Controlador para agregar un nuevo punto verde
@@ -8,7 +9,7 @@ exports.agregarPuntoVerde = async (req, res) => {
         // Verificar si las coordenadas están dentro de Ecuador
         const estaEnChimborazo = await verificarUbicacionChimborazo(latitud, longitud);
         if (!estaEnChimborazo) {
-            return res.status(400).json({ error: 'Las coordenadas no están dentro de Chimborazo' });
+            return res.status(400).json({ error: 'Las coordenadas no están dentro de Ecuador' });
         }
 
         // Verificar si el negocio_id existe
@@ -20,7 +21,7 @@ exports.agregarPuntoVerde = async (req, res) => {
         // Verificar si ya existe un punto verde en un radio de 5 metros
         const existeProximidad = await verificarProximidadPuntoVerde(latitud, longitud);
         if (existeProximidad) {
-            return res.status(400).json({ error: 'Ya existe un punto verde en un radio de 5 metros' });
+            return res.status(400).json({ error: 'Ya existe un punto verde en un radio de 15 metros' });
         }
 
         // Crear el punto verde en la base de datos
