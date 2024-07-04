@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Create a new negocio
+/* Create a new negocio
 router.post('/', async (req, res) => {
   try {
     const negocio = await db.tb_negocio.create(req.body);
@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-});
+});*/
 
 // Get a negocio by id
 router.get('/:id', async (req, res) => {
