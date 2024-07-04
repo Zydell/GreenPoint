@@ -160,7 +160,7 @@ exports.login = async (req, res) => {
 
         // Generar token
         const token = jwt.sign({ id: credencial.credencial_id, tipousuario: credencial.tipousuario }, 'secret', { expiresIn: '1h' });
-        const notificaciones = notificationService.getNotifications(user.credencial_id);
+        //const notificaciones = notificationService.getNotifications(user.credencial_id);
 
         res.json({ token });
     } catch (error) {
