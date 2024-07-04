@@ -25,6 +25,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.CHAR(10),
         allowNull: false
       },
+      image: {
+        type: DataTypes.BLOB('long'),
+        allowNull: true
+      },
       fecharegistro: {
         type: DataTypes.DATE,
         allowNull: false

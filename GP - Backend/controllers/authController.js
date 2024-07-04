@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const upload = require('../config/multer');
 const { tb_credenciales, tb_ciudadano, tb_negocio, tb_admin, tb_greencoin_cdn } = require('../models');
 const notificationService = require('../services/notificationService');
 
@@ -72,10 +73,15 @@ exports.registerCiudadano = async (req, res) => {
 };
 
 // Registro de Negocio
-exports.registerNegocio = async (req, res) => {
+exports.registerNegocio =  [upload.single('image'), async (req, res) => { 
     try {
+
+        console.log('Request body:', req.body);
+        console.log('Request file:', req.file);
+
         const { nombre, propietario, tipo_negocio, direccion, telefono, correo_electronico, contrasena } = req.body;
-        
+        const image = req.file ? req.file.buffer : null;
+
         if (await emailExists(correo_electronico)) {
             return res.status(400).json({ message: 'El correo ya está registrado.' });
         }
@@ -89,6 +95,7 @@ exports.registerNegocio = async (req, res) => {
             tipo_negocio,
             direccion,
             telefono,
+            image,
             fecharegistro: new Date()
         });
 
@@ -104,7 +111,7 @@ exports.registerNegocio = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-};
+}];
 
 // Registro de Admin
 exports.registerAdmin = async (req, res) => {
