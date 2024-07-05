@@ -158,11 +158,57 @@ exports.login = async (req, res) => {
         const isMatch = await bcrypt.compare(contrasena, credencial.contrasena);
         if (!isMatch) return res.status(401).json({ message: 'Contraseña incorrecta' });
 
-        // Generar token
+        // Generar token    
         const token = jwt.sign({ id: credencial.credencial_id, tipousuario: credencial.tipousuario }, 'secret', { expiresIn: '1h' });
         //const notificaciones = notificationService.getNotifications(user.credencial_id);
 
-        res.json({ token });
+        // Obtener información adicional del usuario
+        let userInfo;
+        if (credencial.tipousuario === 1) {
+            userInfo = await tb_ciudadano.findOne({ where: { ciudadano_id: credencial.usuario_id } });
+
+            const gc = await tb_greencoin_cdn.findOne({
+                where: { greencoin_id: userInfo.greencoin_id }
+            });
+
+            res.json({ token ,
+                user: {
+                    ciudadano_id: credencial.usuario_id,
+                    correo_electronico: credencial.correo_electronico,
+                    tipousuario: credencial.tipousuario,
+                    nombre: userInfo.nombre,
+                    apellido: userInfo.apellido,
+                    telefono: userInfo.telefono,
+                    fecha_nac: userInfo.fecha_nac,
+                    estado: userInfo.estado,
+                    greencoins: gc.total
+                }
+            });
+
+        } else if (credencial.tipousuario === 2) {
+            userInfo = await tb_negocio.findOne({ where: { negocio_id: credencial.usuario_id } });
+
+            res.json({ token ,
+                user: {
+                    negocio_id: credencial.credencial_id,
+                    correo_electronico: credencial.correo_electronico,
+                    tipousuario: credencial.tipousuario,
+                }
+            });
+
+        } else if (credencial.tipousuario === 3) {
+            userInfo = await tb_admin.findOne({ where: { admin_id: credencial.usuario_id } });
+
+            res.json({ token ,
+                user: {
+                    admin_id: credencial.credencial_id,
+                    correo_electronico: credencial.correo_electronico,
+                    tipousuario: credencial.tipousuario,
+                }
+            });
+        }
+
+        
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
