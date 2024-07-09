@@ -38,7 +38,7 @@ exports.registerCiudadano = async (req, res) => {
             return res.status(400).json({ message: 'Debe ser mayor de 18 años para registrarse.' });
         }
         if (age > 65) {
-            return res.status(400).json({ message: 'El limite de edad es de 65 años.' });
+            return res.status(400).json({ message: 'El limite de edad es de 90 años.' });
         }
 
         // Encriptar contraseña
