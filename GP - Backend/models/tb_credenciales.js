@@ -22,6 +22,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
       },
+      resetToken: {
+        type: DataTypes.STRING,
+        allowNull: true // O como sea necesario
+      },
+      resetTokenExpires: {
+        type: DataTypes.DATE,
+        allowNull: true
+      },
       fechacreacion: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
