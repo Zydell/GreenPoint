@@ -1,60 +1,9 @@
 const { tb_ofertas, tb_canjea_oferta, tb_ciudadano, tb_codigos_canje, tb_greencoin_cdn, tb_registra_reciclaje, tb_materiales, tb_credenciales } = require('../models');
 const { v4: uuidv4 } = require('uuid');
 
-/* Canjear oferta usando greencoins
-exports.canjearOferta = async (req, res) => {
-    try {
-        const { correo_electronico, oferta_id } = req.body;
-        let ciudadano_id = null;
-
-        // Buscar el ciudadano en la tabla tb_credenciales
-        const credencial = await tb_credenciales.findOne({
-            where: { correo_electronico }
-        });
-
-        if (!credencial) {
-            return res.status(404).json({ message: 'Correo electrónico no encontrado' });
-        }
-
-        ciudadano_id = credencial.credencial_id;
-
-        // Verificar si el ciudadano existe
-        const ciudadano = await tb_ciudadano.findByPk(ciudadano_id);
-        if (!ciudadano) {
-            return res.status(404).json({ error: 'Ciudadano no encontrado' });
-        }
-
-        // Verificar si la oferta existe
-        const oferta = await tb_ofertas.findByPk(oferta_id);
-        if (!oferta) {
-            return res.status(404).json({ error: 'Oferta no encontrada' });
-        }
-
-        Verificar si el ciudadano tiene suficientes greencoins
-        const greencoins = await tb_greencoin_cdn.findOne({
-            where: { ciudadano_id }
-        });
-
-        if (!greencoins || greencoins.total < oferta.gc_necesarios) {
-            return res.status(400).json({ error: 'No tienes suficientes greencoins' });
-        }
-       
-        // Restar los greencoins necesarios
-        greencoins.total -= oferta.gc_necesarios;
-        await greencoins.save();
-
-        // Crear el registro de canjeo de oferta
-        const canjeo = await tb_canjea_oferta.create({
-            ofertas_id: oferta_id,
-            ciudadano_id,
-            fecha: new Date()
-        });
-
-        res.status(201).json({ message: 'Oferta canjeada exitosamente', canjeo });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};*/
+//
+const QRCode = require('qrcode');
+//
 
 // Obtener historial de ofertas para un ciudadano
 exports.obtenerHistorialOfertasCiudadano = async (req, res) => {
@@ -135,23 +84,6 @@ exports.canjearOferta = async (req, res) => {
             return res.status(404).json({ error: 'Ciudadano no encontrado' });
         }
 
-        /*
-        // Buscar el ciudadano en la tabla tb_credenciales
-        try {
-            const ciu_id = await tb_ciudadano.findOne({
-                where: { greencoin_id }
-            });
-    
-            if (ciu_id) {
-                greenc = credencial.credencial_id;
-            } else {
-                // Si no se encuentra, devolver un mensaje indicando que no se encontró
-                return res.status(404).json({ message: 'Correo electrónico no encontrado' });
-            }
-        } catch (error) {
-            return res.status(500).json({ error: error.message });
-        }
-        */
         let greencoin_id = ciudadano.greencoin_id
         const greenc = await tb_greencoin_cdn.findOne({
             where: { greencoin_id }
@@ -194,6 +126,16 @@ exports.canjearOferta = async (req, res) => {
             ciudadano_id,
             estado: 'generado'
         });
+
+        //-------------------------------------------------------
+        // Generar el código QR a partir del UUID
+        QRCode.toDataURL(codigo, (err, url) => {
+            if (err) {
+            return res.status(500).json({ error: 'Error al generar el código QR' });
+            }
+            res.status(201).json({ message: 'Código generado exitosamente', qrCode: url, codigo: nuevoCodigo });
+        });
+        //-------------------------------------------------------
 
         res.status(201).json({ message: 'Oferta canjeada exitosamente', codigo });
     } catch (error) {
