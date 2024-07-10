@@ -65,6 +65,8 @@ exports.registerCiudadano = async (req, res) => {
         await tb_credenciales.create({
             correo_electronico,
             contrasena: hashedPassword,
+            resetToken: null,
+            resetTokenExpires: null,
             tipousuario: 1, // 1 para ciudadano
             usuario_id: ciudadano.ciudadano_id
         });
@@ -106,6 +108,8 @@ exports.registerNegocio =  [upload.single('image'), async (req, res) => {
         await tb_credenciales.create({
             correo_electronico,
             contrasena: hashedPassword,
+            resetToken: null,
+            resetTokenExpires: null,
             tipousuario: 2, // 2 para negocio
             usuario_id: negocio.negocio_id
         });
@@ -138,6 +142,8 @@ exports.registerAdmin = async (req, res) => {
         await tb_credenciales.create({
             correo_electronico,
             contrasena: hashedPassword,
+            resetToken: null,
+            resetTokenExpires: null,
             tipousuario: 3, // 3 para admin
             usuario_id: admin.admin_id
         });

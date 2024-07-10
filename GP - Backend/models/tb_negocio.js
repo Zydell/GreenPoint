@@ -5,10 +5,6 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true
       },
-      ruc: {
-        type: DataTypes.CHAR(13),
-        allowNull: false
-      },
       nombre: {
         type: DataTypes.STRING(100),
         allowNull: false
