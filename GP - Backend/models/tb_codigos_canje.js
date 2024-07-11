@@ -46,7 +46,7 @@ const CodigoCanje = sequelize.define('tb_codigos_canje', {
     },
     estado: {
         type: DataTypes.STRING(20),
-        defaultValue: 'generado',
+        defaultValue: 'GENERADO',
     },
     fecha_validacion: {
         type: DataTypes.DATE,
@@ -56,6 +56,10 @@ const CodigoCanje = sequelize.define('tb_codigos_canje', {
     tableName: 'tb_codigos_canje',
     timestamps: false,
 });
+
+CodigoCanje.associate = function(models) {
+    CodigoCanje.belongsTo(models.tb_ofertas, { foreignKey: 'negocio_id' , constraints: false });
+  };
 
 return CodigoCanje;
 };
