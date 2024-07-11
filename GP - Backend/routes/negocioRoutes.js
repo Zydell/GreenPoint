@@ -6,7 +6,14 @@ const db = require('../models');
 router.get('/', async (req, res) => {
   try {
     const negocios = await db.tb_negocio.findAll();
-    res.status(200).json(negocios);
+    const negociosWithBase64Images = negocios.map(negocio => {
+      const negocioData = negocio.toJSON();
+      if (negocioData.image) {
+        negocioData.image = Buffer.from(negocioData.image).toString('base64');
+      }
+      return negocioData;
+    });
+    res.status(200).json(negociosWithBase64Images);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
