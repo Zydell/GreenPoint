@@ -199,9 +199,10 @@ exports.login = async (req, res) => {
 
             res.json({ token ,
                 user: {
-                    negocio_id: credencial.credencial_id,
+                    negocio_id: credencial.usuario_id,
                     correo_electronico: credencial.correo_electronico,
                     tipousuario: credencial.tipousuario,
+                    image: userInfo.image
                 }
             });
 
