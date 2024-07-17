@@ -35,6 +35,25 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+// get a credencial by id user y type user
+router.get('/:usuario_id/:tipousuario', async (req, res) => {
+  try {
+    const { usuario_id, tipousuario } = req.params;
+    console.log(`Received params - usuario_id: ${usuario_id}, tipousuario: ${tipousuario}`);
+    
+    const credencial = await db.tb_credenciales.findOne({ where: { usuario_id, tipousuario } });
+    console.log(`Found credencial: ${JSON.stringify(credencial)}`);
+    
+    if (credencial) {
+      res.status(200).json(credencial);
+    } else {
+      res.status(404).json({ message: 'Credencial not found' });
+    }
+  } catch (error) {
+    console.error(`Error finding credencial: ${error.message}`);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Update a credencial by id
 router.put('/:id', async (req, res) => {
