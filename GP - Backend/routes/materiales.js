@@ -12,6 +12,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Get materiales con estado = true (activos)
+router.get('/activo', async (req, res) => {
+  try {
+    const materiales = await db.tb_materiales.findAll({ where: { estado: true } });
+    res.status(200).json(materiales);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Create a new 
 router.post('/', async (req, res) => {
   try {
