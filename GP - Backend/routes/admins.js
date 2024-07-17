@@ -5,6 +5,7 @@ const db = require('../models');
 // Get all 
 router.get('/', async (req, res) => {
   try {
+    //const admin = await db.tb_admin.findAll({ offset: 1 });
     const admin = await db.tb_admin.findAll();
     res.status(200).json(admin);
   } catch (error) {
