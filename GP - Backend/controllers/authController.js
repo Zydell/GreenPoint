@@ -212,6 +212,7 @@ exports.login = async (req, res) => {
             res.json({ token ,
                 user: {
                     admin_id: credencial.credencial_id,
+                    nombre: userInfo ? userInfo.nombre : '',  // Asegurándote de incluir el nombre del admin
                     correo_electronico: credencial.correo_electronico,
                     tipousuario: credencial.tipousuario,
                 }
