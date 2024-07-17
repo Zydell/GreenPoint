@@ -39,6 +39,22 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Get puntos verdes by negocio_id
+router.get('/negocio/:id_negocio', async (req, res) => {
+  try {
+    const puntosverdes = await db.tb_puntos_verdes.findAll({
+      where: { negocio_id: req.params.id_negocio }
+    });
+    if (puntosverdes.length > 0) {
+      res.status(200).json(puntosverdes);
+    } else {
+      res.status(404).json({ message: 'Not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Update an  by id
 /*
 router.put('/:id', async (req, res) => {
