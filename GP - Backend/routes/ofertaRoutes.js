@@ -109,14 +109,14 @@ router.post('/', async (req, res) => {
 
     // Validate fecha_inicio
     if (startDate < today) {
-      return res.status(400).json({ message: 'fecha_inicio debe ser mayor o igual a la fecha actual' });
+      return res.status(400).json({ message: 'La fecha de inicio debe ser mayor o igual a la fecha actual' });
     }
 
     // Validate fecha_fin
     const minEndDate = new Date(startDate);
     minEndDate.setDate(minEndDate.getDate() + 7);
     if (endDate < minEndDate) {
-      return res.status(400).json({ message: 'fecha_fin debe ser al menos una semana mayor que fecha_inicio' });
+      return res.status(400).json({ message: 'La fecha fin debe ser al menos una semana mayor que fecha inicio de la oferta' });
     }
 
     const oferta = await db.tb_ofertas.create(req.body);
@@ -142,6 +142,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update an oferta by id
+/*
 router.put('/:id', async (req, res) => {
   try {
     const oferta = await db.tb_ofertas.findByPk(req.params.id);
@@ -154,7 +155,40 @@ router.put('/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});*/
+
+// Update an oferta by id con validaciones
+router.put('/:id', async (req, res) => {
+  try {
+    const { fecha_inicio, fecha_fin } = req.body;
+    const today = new Date();
+    const startDate = new Date(fecha_inicio);
+    const endDate = new Date(fecha_fin);
+
+    // Validate fecha_inicio
+    if (startDate < today) {
+      return res.status(400).json({ message: 'La fecha de inicio debe ser mayor o igual a la fecha actual' });
+    }
+
+    // Validate fecha_fin
+    const minEndDate = new Date(startDate);
+    minEndDate.setDate(minEndDate.getDate() + 7);
+    if (endDate < minEndDate) {
+      return res.status(400).json({ message: 'La fecha fin debe ser al menos una semana mayor que fecha inicio de la oferta' });
+    }
+
+    const oferta = await db.tb_ofertas.findByPk(req.params.id);
+    if (oferta) {
+      await oferta.update(req.body);
+      res.status(200).json(oferta);
+    } else {
+      res.status(404).json({ message: 'Oferta no encontrada' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
+
 
 // Delete an oferta by id
 /*
