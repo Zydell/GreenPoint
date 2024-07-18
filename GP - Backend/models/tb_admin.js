@@ -5,6 +5,10 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true
       },
+      estado: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true,
+      },
       credencial_id: DataTypes.INTEGER,
       ofertas_id: DataTypes.INTEGER,
       punto_verde_id: DataTypes.INTEGER,

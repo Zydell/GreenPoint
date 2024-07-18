@@ -194,7 +194,7 @@ exports.login = async (req, res) => {
                 }
             });
 
-        } else if (credencial.tipousuario === 2) {
+        } else if (credencial.tipousuario === 2 && credencial.estado === true) {
             userInfo = await tb_negocio.findOne({ where: { negocio_id: credencial.usuario_id } });
 
             res.json({ token ,
@@ -206,20 +206,22 @@ exports.login = async (req, res) => {
                 }
             });
 
-        } else if (credencial.tipousuario === 3) {
+        } else if (credencial.tipousuario === 3 && credencial.estado === true) {
             userInfo = await tb_admin.findOne({ where: { admin_id: credencial.usuario_id } });
 
             res.json({ token ,
                 user: {
                     admin_id: credencial.credencial_id,
-                    nombre: userInfo ? userInfo.nombre : '',  // Asegurándote de incluir el nombre del admin
+                    nombre: userInfo.nombre,  // Asegurándote de incluir el nombre del admin
                     correo_electronico: credencial.correo_electronico,
                     tipousuario: credencial.tipousuario,
                 }
             });
         }
-
-        
+        else {
+            // Si no se cumple ninguna de las condiciones
+            return res.status(400).json({ message: 'Usuario no reconocido o no válido' });
+        }
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
