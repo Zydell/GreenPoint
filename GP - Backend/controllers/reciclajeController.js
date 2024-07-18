@@ -33,13 +33,7 @@ exports.registrarReciclaje = async (req, res) => {
         if (!ciudadan || !negocio || !puntov) {
             return res.status(404).json({ error: 'Ciudadano, negocio o punto verde no encontrado' });
         }
-        
-        /*
-        // Verificar si el ciudadano, negocio y punto verde existen
-        const ciudadan = await tb_ciudadano.findByPk(ciudadano_id);
-        const negocio = await tb_negocio.findByPk(negocio_id);
-        const puntov = await tb_puntos_verdes.findByPk(punto_verde_id);
-        */
+
         // Obtener el valor_por_libra del material
         const material = await tb_materiales.findByPk(material_id);
         if (!material) {
@@ -86,62 +80,6 @@ exports.registrarReciclaje = async (req, res) => {
                 { total: newTotal, registro_id: reciclaje.reciclaje_id },
                 { where: { greencoin_id: ciudadan.greencoin_id } }
             );
-
-        //console.log('\nVERIFICAR EL VALOR: '+newTotal);
-        /*
-        // Crear el historial del ciudadano
-        await tb_historial_cdn.create({
-            ciudadano_id: reg_reciclaje.ciudadano_id,
-            punto_verde_id: reg_reciclaje.punto_verde_id,
-            reciclaje_id: reciclaje.reciclaje_id,
-            cantidad: reciclaje.cantidad,
-            greencoins_obtenidos: gc_obtenidos
-        });
-
-        // Crear el historial del negocio
-        await tb_historial_negocio.create({
-            //ciudadano_id,     VERIFICAR SI TAL VEZ SERIA NECESARIO
-            negocio_id: reg_reciclaje.negocio_id,
-            punto_verde_id: reg_reciclaje.punto_verde_id,
-            reciclaje_id: reciclaje.reciclaje_id,
-            cantidad: reciclaje.cantidad
-        });
-        */
-
-        // Enviar notificación al correo al ciudadano
-            /*
-            const nodemailer = require('nodemailer');
-
-            // Configurar el transportador de correo electrónico
-            const transporter = nodemailer.createTransport({
-                service: 'Gmail', // o el servicio que uses
-                auth: {
-                    user: 'your-email@gmail.com',
-                    pass: 'your-email-password'
-                }
-            });
-
-        const mailOptions = {
-            from: 'your-email@gmail.com',
-            to: correo_electronico,
-            subject: 'Registro de reciclaje exitoso',
-            text: `Hola ${ciudadan.nombre},
-            Has registrado un reciclaje exitosamente en el punto verde: ${puntov.nombre}.
-            Materiales: ${material.nombre}
-            Cantidad: ${cantidad} libras
-            GreenCoins obtenidos: ${gc_obtenidos}
-
-            ¡Gracias por contribuir al reciclaje!
-            `
-        };
-
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.error('Error al enviar el correo electrónico:', error);
-            } else {
-                console.log('Correo electrónico enviado:', info.response);
-            }
-        });*/
 
          // Agregar notificación al servicio de notificaciones
          const notificacionMensaje = {

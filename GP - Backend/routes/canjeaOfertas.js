@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 // Get canjeaofertas by estado CANJEADO
 router.get('/estado/canjeada', async (req, res) => {
   try {
-    const canjeaofertas = await db.tb_canjea_oferta.findAll({ where: { estado: 'canjeada' } });
+    const canjeaofertas = await db.tb_canjea_oferta.findAll({ where: { estado: 'CANJEADA' } });
     res.status(200).json(canjeaofertas);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -24,9 +24,25 @@ router.get('/estado/canjeada', async (req, res) => {
 });
 
 // Get canjeaofertas by estado GENERADO
-router.get('/estado/generado', async (req, res) => {
+router.get('/estado/validado', async (req, res) => {
   try {
-    const canjeaofertas = await db.tb_canjea_oferta.findAll({ where: { estado: 'GENERADO' } });
+    const canjeaofertas = await db.tb_codigos_canje.findAll({ where: { estado: 'VALIDADO' } });
+    res.status(200).json(canjeaofertas);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get canjeaofertas by estado VALIDADO for a specific ciudadano
+router.get('/estado/validado/:ciudadanoId', async (req, res) => {
+  const { ciudadanoId } = req.params;
+  try {
+    const canjeaofertas = await db.tb_codigos_canje.findAll({
+      where: {
+        estado: 'VALIDADO',
+        ciudadano_id: ciudadanoId
+      }
+    });
     res.status(200).json(canjeaofertas);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -34,9 +50,25 @@ router.get('/estado/generado', async (req, res) => {
 });
 
 // Get canjeaofertas by estado EXPIRADO
-router.get('/estado/expirado', async (req, res) => {
+router.get('/estado/generado', async (req, res) => {
   try {
-    const canjeaofertas = await db.tb_canjea_oferta.findAll({ where: { estado: 'EXPIRADO' } });
+    const canjeaofertas = await db.tb_codigos_canje.findAll({ where: { estado: 'GENERADO' } });
+    res.status(200).json(canjeaofertas);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get canjeaofertas by estado VALIDADO for a specific ciudadano
+router.get('/estado/generado/:ciudadanoId', async (req, res) => {
+  const { ciudadanoId } = req.params;
+  try {
+    const canjeaofertas = await db.tb_codigos_canje.findAll({
+      where: {
+        estado: 'GENERADO',
+        ciudadano_id: ciudadanoId
+      }
+    });
     res.status(200).json(canjeaofertas);
   } catch (error) {
     res.status(500).json({ error: error.message });
