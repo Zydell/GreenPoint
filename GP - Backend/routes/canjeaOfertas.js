@@ -12,6 +12,37 @@ router.get('/', async (req, res) => {
   }
 });
 
+
+// Get canjeaofertas by estado CANJEADO
+router.get('/estado/canjeada', async (req, res) => {
+  try {
+    const canjeaofertas = await db.tb_canjea_oferta.findAll({ where: { estado: 'canjeada' } });
+    res.status(200).json(canjeaofertas);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get canjeaofertas by estado GENERADO
+router.get('/estado/generado', async (req, res) => {
+  try {
+    const canjeaofertas = await db.tb_canjea_oferta.findAll({ where: { estado: 'GENERADO' } });
+    res.status(200).json(canjeaofertas);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get canjeaofertas by estado EXPIRADO
+router.get('/estado/expirado', async (req, res) => {
+  try {
+    const canjeaofertas = await db.tb_canjea_oferta.findAll({ where: { estado: 'EXPIRADO' } });
+    res.status(200).json(canjeaofertas);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Create a new 
 router.post('/', async (req, res) => {
   try {

@@ -5,62 +5,6 @@ const { v4: uuidv4 } = require('uuid');
 const QRCode = require('qrcode');
 //
 
-// Obtener historial de ofertas para un ciudadano
-/*exports.obtenerHistorialOfertasCiudadano = async (req, res) => {
-    try {
-        const { correo_electronico } = req.params;
-        let ciudadano_id = null;
-
-        // Buscar el ciudadano en la tabla tb_credenciales
-        const credencial = await tb_credenciales.findOne({
-            where: { correo_electronico }
-        });
-
-        if (!credencial) {
-            return res.status(404).json({ message: 'Correo electrónico no encontrado' });
-        }
-
-        ciudadano_id = credencial.credencial_id;
-
-        // Verificar si el ciudadano existe
-        const ciudadano = await tb_ciudadano.findByPk(ciudadano_id);
-        if (!ciudadano) {
-            return res.status(404).json({ error: 'Ciudadano no encontrado' });
-        }
-
-        // Obtener el historial de canjeos de ofertas del ciudadano
-        const historial = await tb_canjea_oferta.findAll({
-            where: { ciudadano_id },
-            include: [{ model: tb_ofertas }]
-        });
-
-        // Determinar el estado de cada oferta
-        const historialConEstado = historial.map(canjeo => {
-            let estado = canjeo.estado;
-            const fechaActual = new Date();
-            if (estado === 'obtenida' && new Date(canjeo.tb_oferta.fecha_fin) < fechaActual) {
-                estado = 'vencida';
-                canjeo.estado = estado;
-                canjeo.save();  // Actualizar estado en la base de datos
-            }
-            return {
-                oferta_id: canjeo.tb_oferta.oferta_id,
-                descripcion: canjeo.tb_oferta.descripcion,
-                gc_necesarios: canjeo.tb_oferta.gc_necesarios,
-                fecha_inicio: canjeo.tb_oferta.fecha_inicio,
-                fecha_fin: canjeo.tb_oferta.fecha_fin,
-                estado,
-                fecha_canjeo: canjeo.fecha_canjeo
-            };
-        });
-
-        res.json(historialConEstado);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-*/
-
 //VERSIÓN PRUEBA
 
 exports.obtenerHistorialOfertasCiudadano = async (req, res) => {
@@ -251,7 +195,7 @@ exports.canjearOferta = async (req, res) => {
             ofertas_id,
             ciudadano_id,
             fecha: new Date(),
-            estado: 'canjeada'
+            estado: 'CANJEADA',
         });
 
         // Reducir los greencoins del ciudadano
