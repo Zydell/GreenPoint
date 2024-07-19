@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios');
 const router = express.Router();
 const db = require('../models');
 const geoLocationController = require('../controllers/geoLocationController');
@@ -7,6 +8,20 @@ router.get('/', async (req, res) => {
   try {
     const puntosverdes = await db.tb_puntos_verdes.findAll();
     res.status(200).json(puntosverdes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+//Obtener una direccion a partir de latitud y longitud
+router.get('/geocode', async (req, res) => {
+  const { lat, lng } = req.query;
+  const apiKey = 'AIzaSyBR6xZnxe2B4Kw9VvuKGLNk9RDN_X7O2DU'; // Reemplaza con tu clave de API real
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${apiKey}`;
+
+  try {
+    const response = await axios.get(url);
+    res.json(response.data);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -79,6 +94,21 @@ router.delete('/:id', async (req, res) => {
     const puntosverdes = await db.tb_puntos_verdes.findByPk(req.params.id);
     if (puntosverdes) {
       await puntosverdes.destroy();
+      res.status(204).json();
+    } else {
+      res.status(404).json({ message: 'Not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Delete an  by id (eliminado lógico)
+router.delete('/logico/:id', async (req, res) => {
+  try {
+    const puntosverdes = await db.tb_puntos_verdes.findByPk(req.params.id);
+    if (puntosverdes) {
+      await puntosverdes.update({ estado: false });
       res.status(204).json();
     } else {
       res.status(404).json({ message: 'Not found' });

@@ -67,7 +67,7 @@ exports.actualizarPuntoVerde = async (req, res) => {
         // Verificar si ya existe un punto verde en un radio de 5 metros
         const existeProximidad = await verificarProximidadPuntoVerde(latitud, longitud);
         if (existeProximidad) {
-            return res.status(400).json({ error: 'Ya existe un punto verde en un radio de 5 metros' });
+            return res.status(400).json({ error: 'Ya existe un punto verde en un radio de 15 metros' });
         } 
 
         // Actualizar el punto verde en la base de datos

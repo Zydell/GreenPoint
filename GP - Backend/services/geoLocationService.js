@@ -56,7 +56,7 @@ async function verificarExistenciaNegocio(negocio_id) {
     }
 }
 
-// Función para verificar si ya existe un punto verde en un radio de 5 metros
+// Función para verificar si ya existe un punto verde en un radio de 15 metros
 async function verificarProximidadPuntoVerde(latitud, longitud, radio = 15) {
     try {
         const puntosVerdes = await db.tb_puntos_verdes.findAll();
