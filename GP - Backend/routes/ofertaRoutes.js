@@ -98,15 +98,19 @@ router.get('/active/:negocio_id', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
+function resetTime(date) {
+  date.setHours(0, 0, 0, 0);
+  return date;
+}
 // Create a new oferta
 router.post('/', async (req, res) => {
+ 
   try {
     const { fecha_inicio, fecha_fin } = req.body;
-    const today = new Date();
-    const startDate = new Date(fecha_inicio);
-    const endDate = new Date(fecha_fin);
-
+    const today = resetTime(new Date());
+    const startDate = resetTime(new Date(fecha_inicio));
+    const endDate = resetTime(new Date(fecha_fin));
+    console.log(today+'****'+startDate+"+++++"+endDate);
     // Validate fecha_inicio
     if (startDate < today) {
       return res.status(400).json({ message: 'La fecha de inicio debe ser mayor o igual a la fecha actual' });
@@ -118,7 +122,12 @@ router.post('/', async (req, res) => {
     if (endDate < minEndDate) {
       return res.status(400).json({ message: 'La fecha fin debe ser al menos una semana mayor que fecha inicio de la oferta' });
     }
-
+    /*
+    const millisecondsInAWeek = 7 * 24 * 60 * 60 * 1000;
+    if ((endDate - startDate) < millisecondsInAWeek) {
+      return res.status(400).json({ message: 'La fecha fin debe ser al menos una semana mayor que la fecha inicio de la oferta' });
+    }
+    */
     const oferta = await db.tb_ofertas.create(req.body);
     res.status(201).json(oferta);
   } catch (error) {
@@ -161,21 +170,28 @@ router.put('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { fecha_inicio, fecha_fin } = req.body;
-    const today = new Date();
-    const startDate = new Date(fecha_inicio);
-    const endDate = new Date(fecha_fin);
+    const today = resetTime(new Date());
+    const startDate = resetTime(new Date(fecha_inicio));
+    const endDate = resetTime(new Date(fecha_fin));
 
     // Validate fecha_inicio
-    if (startDate < today) {
+    /*if (startDate < today) {
       return res.status(400).json({ message: 'La fecha de inicio debe ser mayor o igual a la fecha actual' });
-    }
+    }*/
+      const minEndDate = new Date(startDate);
+      minEndDate.setDate(minEndDate.getDate() + 7);
+            console.log(today+'--------'+startDate+" Resta"+(endDate - startDate)+"Min "+minEndDate);
 
-    // Validate fecha_fin
-    const minEndDate = new Date(startDate);
-    minEndDate.setDate(minEndDate.getDate() + 7);
-    if (endDate < minEndDate) {
-      return res.status(400).json({ message: 'La fecha fin debe ser al menos una semana mayor que fecha inicio de la oferta' });
-    }
+      if (endDate < minEndDate) {
+        return res.status(400).json({ message: 'La fecha fin debe ser al menos una semana mayor que fecha inicio de la oferta' });
+      }
+
+    // Validación de fecha_fin
+      /*const millisecondsInAWeek = 7 * 24 * 60 * 60 * 1000;
+      if ((endDate - startDate) < millisecondsInAWeek) {
+        return res.status(400).json({ message: 'La fecha fin debe ser al menos una semana mayor que la fecha inicio de la oferta' });
+      }*/
+
 
     const oferta = await db.tb_ofertas.findByPk(req.params.id);
     if (oferta) {
