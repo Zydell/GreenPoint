@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 const QRCode = require('qrcode');
 //
 
-//VERSIÓN PRUEBA
+/*VERSIÓN PRUEBA
 
 exports.obtenerHistorialOfertasCiudadano = async (req, res) => {
     try {
@@ -39,6 +39,7 @@ exports.obtenerHistorialOfertasCiudadano = async (req, res) => {
             include: [
                 {
                     model: tb_ofertas,
+                    where: { tb_negocio },
                     include: [
                         {
                             model: tb_negocio
@@ -53,7 +54,7 @@ exports.obtenerHistorialOfertasCiudadano = async (req, res) => {
             let estado = canjeo.estado;
             let codigo = canjeo.codigo;
             const fechaActual = new Date();
-            if (estado === 'obtenida' && new Date(canjeo.tb_oferta.fecha_fin) < fechaActual) {
+            if (estado === 'obtenida' && new Date(canjeo.tb_ofertas.fecha_fin) < fechaActual) {
                 estado = 'vencida';
                 canjeo.estado = estado;
                 canjeo.codigo = codigo;
@@ -76,7 +77,73 @@ exports.obtenerHistorialOfertasCiudadano = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+};*/
+
+exports.obtenerHistorialOfertasCiudadano = async (req, res) => {
+    try {
+        const { correo_electronico } = req.params;
+
+        // Buscar el ciudadano en la tabla tb_credenciales
+        const credencial = await tb_credenciales.findOne({
+            where: { correo_electronico }
+        });
+
+        if (!credencial) {
+            return res.status(404).json({ message: 'Correo electrónico no encontrado' });
+        }
+
+        const ciudadano_id = credencial.usuario_id;
+
+        // Verificar si el ciudadano existe
+        const ciudadano = await tb_ciudadano.findByPk(ciudadano_id);
+        if (!ciudadano) {
+            return res.status(404).json({ error: 'Ciudadano no encontrado' });
+        }
+
+        // Obtener el historial de canjeos de ofertas del ciudadano
+        const historial = await tb_codigos_canje.findAll({
+            where: { ciudadano_id },
+            include: [
+                {
+                    model: tb_ofertas,
+                    include: [
+                        {
+                            model: tb_negocio,
+                            attributes: ['nombre'] // Aseguramos que solo traemos el nombre del negocio
+                        }
+                    ]
+                }
+            ]
+        });
+
+        // Determinar el estado de cada oferta
+        const fechaActual = new Date();
+        const historialConEstado = await Promise.all(historial.map(async canjeo => {
+            let estado = canjeo.estado;
+            if (estado === 'obtenida' && new Date(canjeo.tb_oferta.fecha_fin) < fechaActual) {
+                estado = 'vencida';
+                canjeo.estado = estado;
+                await canjeo.save();  // Actualizar estado en la base de datos
+            }
+            return {
+                negocio: canjeo.tb_oferta.tb_negocio.nombre, // Nombre del negocio
+                oferta_id: canjeo.tb_oferta.oferta_id,
+                descripcion: canjeo.tb_oferta.descripcion,
+                gc_necesarios: canjeo.tb_oferta.gc_necesarios,
+                fecha_inicio: canjeo.tb_oferta.fecha_inicio,
+                fecha_fin: canjeo.tb_oferta.fecha_fin,
+                estado,
+                fecha_canjeo: canjeo.fecha_canjeo,
+                codigo: canjeo.codigo
+            };
+        }));
+
+        res.json(historialConEstado);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 };
+
 
 // Función para canjear una oferta
 exports.canjearOferta = async (req, res) => {

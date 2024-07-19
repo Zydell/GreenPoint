@@ -58,8 +58,9 @@ const CodigoCanje = sequelize.define('tb_codigos_canje', {
 });
 
 CodigoCanje.associate = function(models) {
-    CodigoCanje.belongsTo(models.tb_ofertas, { foreignKey: 'negocio_id' , constraints: false });
-  };
+    CodigoCanje.belongsTo(models.tb_ofertas, { foreignKey: 'ofertas_id' , constraints: false });
+    CodigoCanje.belongsTo(models.tb_ciudadano, { foreignKey: 'ciudadano_id' , constraints: false });
+};
 
 return CodigoCanje;
 };
