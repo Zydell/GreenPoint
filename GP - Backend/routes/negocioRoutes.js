@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const db = require('../models');
 const multer = require('multer');
-const upload = multer({ dest: 'uploads/' }); // Directorio temporal para guardar archivos
+const storage = multer.memoryStorage(); // Almacena los archivos en memoria
 
+const upload = multer({ storage: storage });
 
 // Get all negocios
 router.get('/', async (req, res) => {
@@ -50,16 +51,19 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', upload.single('image'), async (req, res) => {
   try {
     const negocio = await db.tb_negocio.findByPk(req.params.id);
-    
+
     if (!negocio) {
       return res.status(404).json({ message: 'Negocio not found' });
     }
 
-    // Obtiene los campos que se van a actualizar
-    const { nombre, propietario, tipo_negocio, direccion, telefono, fecharegistro } = req.body;
+    // Initialize updatedFields object
     const updatedFields = {};
 
-    // Actualiza solo los campos que se han proporcionado en la solicitud
+    // Get fields to be updated
+    const { nombre, propietario, tipo_negocio, direccion, telefono, fecharegistro } = req.body;
+    const image = req.file ? req.file.buffer : null;
+
+    // Update only the fields that are provided in the request
     if (nombre) {
       updatedFields.nombre = nombre.trim();
     }
@@ -79,12 +83,12 @@ router.put('/:id', upload.single('image'), async (req, res) => {
       updatedFields.fecharegistro = new Date(fecharegistro);
     }
 
-    // Actualiza la imagen si se ha proporcionado un archivo
-    if (req.file) {
-      updatedFields.image = req.file.buffer; // Guarda el buffer del archivo como imagen
+    // Update the image if a file is provided
+    if (image) {
+      updatedFields.image = image; // Save the file buffer as the image
     }
 
-    // Actualiza el negocio con los campos modificados
+    // Update the business with the modified fields
     await negocio.update(updatedFields);
 
     res.status(200).json({ message: 'Negocio actualizado exitosamente', negocio });
