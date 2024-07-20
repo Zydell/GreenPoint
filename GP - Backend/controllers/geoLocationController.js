@@ -42,7 +42,7 @@ exports.agregarPuntoVerde = async (req, res) => {
 
 // Controlador para actualizar un punto verde existente
 exports.actualizarPuntoVerde = async (req, res) => {
-    const { descripcion, direccion, latitud, longitud, negocio_id } = req.body;
+    const { descripcion, direccion, latitud, longitud, negocio_id ,estado} = req.body;
     const { id } = req.params;
 
     try {
@@ -53,31 +53,40 @@ exports.actualizarPuntoVerde = async (req, res) => {
         }
 
         // Verificar si las coordenadas están dentro de Chimborazo
-        const estaEnChimborazo = await verificarUbicacionChimborazo(latitud, longitud);
-        if (!estaEnChimborazo) {
-            return res.status(400).json({ error: 'Las coordenadas no están dentro de Chimborazo' });
+        if (latitud !== undefined && longitud !== undefined) {
+            const estaEnChimborazo = await verificarUbicacionChimborazo(latitud, longitud);
+            if (!estaEnChimborazo) {
+                return res.status(400).json({ error: 'Las coordenadas no están dentro de Ecuador' });
+            }
         }
 
         // Verificar si el negocio_id existe
-        const negocioExistente = await verificarExistenciaNegocio(negocio_id);
-        if (!negocioExistente) {
-            return res.status(400).json({ error: 'El negocio con el negocio_id proporcionado no existe' });
+        if (negocio_id !== undefined) {
+            const negocioExistente = await verificarExistenciaNegocio(negocio_id);
+            if (!negocioExistente) {
+                return res.status(400).json({ error: 'El negocio con el negocio_id proporcionado no existe' });
+            }
         }
 
-        // Verificar si ya existe un punto verde en un radio de 5 metros
-        const existeProximidad = await verificarProximidadPuntoVerde(latitud, longitud);
-        if (existeProximidad) {
-            return res.status(400).json({ error: 'Ya existe un punto verde en un radio de 15 metros' });
-        } 
+        // Verificar si ya existe un punto verde en un radio de 15 metros
+        if (latitud !== undefined && longitud !== undefined) {
+            const existeProximidad = await verificarProximidadPuntoVerde(latitud, longitud);
+            if (existeProximidad) {
+                return res.status(400).json({ error: 'Ya existe un punto verde en un radio de 15 metros' });
+            }
+        }
+
+        // Crear un objeto con los campos actualizados
+        const updatedFields = {};
+        if (descripcion !== undefined) updatedFields.descripcion = descripcion;
+        if (direccion !== undefined) updatedFields.direccion = direccion;
+        if (latitud !== undefined) updatedFields.latitud = latitud;
+        if (longitud !== undefined) updatedFields.longitud = longitud;
+        if (negocio_id !== undefined) updatedFields.negocio_id = negocio_id;
+        if (estado !== undefined) updatedFields.estado = estado;
 
         // Actualizar el punto verde en la base de datos
-        puntoVerde = await puntoVerde.update({
-            descripcion,
-            direccion,
-            latitud,
-            longitud,
-            negocio_id
-        });
+        await puntoVerde.update(updatedFields);
 
         res.status(200).json({ message: 'Punto verde actualizado exitosamente', puntoVerde });
     } catch (error) {
@@ -85,3 +94,4 @@ exports.actualizarPuntoVerde = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
