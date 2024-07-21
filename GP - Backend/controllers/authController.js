@@ -202,7 +202,8 @@ exports.login = async (req, res) => {
                     negocio_id: credencial.usuario_id,
                     correo_electronico: credencial.correo_electronico,
                     tipousuario: credencial.tipousuario,
-                    image: userInfo.image
+                    image: userInfo.image,
+                    estado: userInfo.estado
                 }
             });
 
@@ -215,6 +216,7 @@ exports.login = async (req, res) => {
                     nombre: userInfo.nombre,  // Asegurándote de incluir el nombre del admin
                     correo_electronico: credencial.correo_electronico,
                     tipousuario: credencial.tipousuario,
+                    estado: userInfo.estado
                 }
             });
         }
