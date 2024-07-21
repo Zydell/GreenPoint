@@ -73,10 +73,11 @@ router.put('/:id', async (req, res) => {
 // Delete a credencial by id
 router.delete('/:id', async (req, res) => {
   try {
+    const credenciales = await db.tb_credenciales.findAll();
     const credencial = await db.tb_credenciales.findByPk(req.params.id);
     if (credencial) {
       await credencial.destroy();
-      res.status(204).json();
+      res.status(204).json(credenciales);
     } else {
       res.status(404).json({ message: 'Credencial not found' });
     }
