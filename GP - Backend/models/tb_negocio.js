@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true
       },
       nombre: {
-        type: DataTypes.STRING(100),
+        type: DataTypes.STRING(150),
         allowNull: false
       },
       propietario: {
@@ -14,11 +14,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       },
       tipo_negocio: {
-        type: DataTypes.STRING(100),
+        type: DataTypes.STRING(500),
         allowNull: false
       },
       direccion: {
-        type: DataTypes.STRING(200),
+        type: DataTypes.STRING(300),
         allowNull: false
       },
       telefono: {
