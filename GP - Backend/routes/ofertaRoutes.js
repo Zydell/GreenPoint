@@ -56,6 +56,38 @@ router.get('/active', async (req, res) => {
   }
 });
 
+// Get Inactive ofertas
+router.get('/inactive', async (req, res) => {
+  try {
+    await updateOfferStates();
+    const ofertas = await db.tb_ofertas.findAll({ where: { estado: false } });
+    if (ofertas && ofertas.length > 0) {
+      const ofertasConNegocio = await Promise.all(ofertas.map(async (oferta) => {
+        const negocio = await db.tb_negocio.findOne({
+          where: { negocio_id: oferta.negocio_id }
+        });
+
+        return {
+          estado: oferta.estado,
+          fechacreacion: oferta.fechacreacion,
+          ofertas_id: oferta.ofertas_id,
+          descripcion: oferta.descripcion,
+          gc_necesarios: oferta.gc_necesarios,
+          negocio: negocio.nombre,
+          fecha_inicio: oferta.fecha_inicio,
+          fecha_fin: oferta.fecha_fin
+        };
+      }));
+
+      res.status(200).json(ofertasConNegocio);
+    } else {
+      res.status(404).json({ message: 'No Inactive ofertas found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Get active ofertas for a specific negocio
 router.get('/active/:negocio_id', async (req, res) => {
   try {
