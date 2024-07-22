@@ -78,6 +78,47 @@ router.post('/validate-token', async (req, res) => {
     res.status(200).json({ message: 'Contraseña restablecida' });
   });
   
+  router.post('/cambiar-password', async (req, res) => {
+    const { correo_electronico, currentPassword, newPassword } = req.body;
+  
+    // Verificar que se han proporcionado todos los campos necesarios
+    if (!correo_electronico || !currentPassword || !newPassword) {
+      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    }
+  
+    try {
+      // Buscar el usuario en la base de datos
+      const user = await db.tb_credenciales.findOne({ where: { correo_electronico } });
+  
+      // Verificar si el usuario existe
+      if (!user) {
+        return res.status(404).json({ error: 'Usuario no encontrado' });
+      }
+  
+      // Comparar la contraseña actual proporcionada con la almacenada en la base de datos
+      const isMatch = await bcrypt.compare(currentPassword, user.contrasena);
+  
+      // Si las contraseñas no coinciden, devolver un error
+      if (!isMatch) {
+        return res.status(400).json({ error: 'Contraseña actual incorrecta' });
+      }
+  
+      // Hashear la nueva contraseña antes de guardarla
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+  
+      // Actualizar la contraseña en la base de datos
+      user.contrasena = hashedPassword;
+      await user.save();
+  
+      // Devolver una respuesta de éxito
+      res.status(200).json({ message: 'Contraseña actualizada con éxito' });
+    } catch (error) {
+      // Manejar cualquier error que ocurra durante el proceso
+      console.error(error);
+      res.status(500).json({ error: 'Error al cambiar la contraseña' });
+    }
+  });
+  
   module.exports = router;
 /*
 router.post('/reset-password', async (req, res) => {
