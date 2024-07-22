@@ -212,7 +212,7 @@ exports.login = async (req, res) => {
 
             res.json({ token ,
                 user: {
-                    admin_id: credencial.credencial_id,
+                    admin_id: credencial.usuario_id,
                     nombre: userInfo.nombre,  // Asegurándote de incluir el nombre del admin
                     correo_electronico: credencial.correo_electronico,
                     tipousuario: credencial.tipousuario,
