@@ -23,6 +23,41 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/active', async (req, res) => {
+  try {
+    const negocios = await db.tb_negocio.findAll(
+      { where: { estado: true } }
+    );
+    const negociosWithBase64Images = negocios.map(negocio => {
+      const negocioData = negocio.toJSON();
+      if (negocioData.image) {
+        negocioData.image = Buffer.from(negocioData.image).toString('base64');
+      }
+      return negocioData;
+    });
+    res.status(200).json(negociosWithBase64Images);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/inactive', async (req, res) => {
+  try {
+    const negocios = await db.tb_negocio.findAll(
+      { where: { estado: false } }
+    );
+    const negociosWithBase64Images = negocios.map(negocio => {
+      const negocioData = negocio.toJSON();
+      if (negocioData.image) {
+        negocioData.image = Buffer.from(negocioData.image).toString('base64');
+      }
+      return negocioData;
+    });
+    res.status(200).json(negociosWithBase64Images);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 /* Create a new negocio
 router.post('/', async (req, res) => {
   try {

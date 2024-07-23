@@ -12,6 +12,23 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/active', async (req, res) => {
+  try {
+    const ciudadanos = await db.tb_ciudadano.findAll({ where: { estado: true } });
+    res.status(200).json(ciudadanos);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/inactive', async (req, res) => {
+  try {
+    const ciudadanos = await db.tb_ciudadano.findAll({ where: { estado: false } });
+    res.status(200).json(ciudadanos);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 // Create a new 
 router.post('/', async (req, res) => {
   try {
