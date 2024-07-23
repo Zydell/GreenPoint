@@ -1,12 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../models');
+const { Op } = require('sequelize');
 
 // Get all 
 router.get('/', async (req, res) => {
   try {
-    //const admin = await db.tb_admin.findAll({ offset: 1 });
-    const admin = await db.tb_admin.findAll();
+    const admin = await db.tb_admin.findAll({
+      where: {
+        admin_id: {
+          [Op.gt]: 1  // Utiliza el operador 'greater than' (mayor que)
+        }
+      }
+    });
+    //const admin = await db.tb_admin.findAll();
     res.status(200).json(admin);
   } catch (error) {
     res.status(500).json({ error: error.message });
