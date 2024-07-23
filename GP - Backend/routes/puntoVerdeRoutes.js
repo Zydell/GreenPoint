@@ -58,7 +58,8 @@ router.get('/:id', async (req, res) => {
 router.get('/negocio/:id_negocio', async (req, res) => {
   try {
     const puntosverdes = await db.tb_puntos_verdes.findAll({
-      where: { negocio_id: req.params.id_negocio, estado: true }
+      //where: { negocio_id: req.params.id_negocio, estado: true }
+      where: { negocio_id: req.params.id_negocio }
     });
     if (puntosverdes.length > 0) {
       res.status(200).json(puntosverdes);
