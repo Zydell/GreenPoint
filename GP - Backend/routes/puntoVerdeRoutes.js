@@ -13,6 +13,34 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/activos', async (req, res) => {
+  try {
+    // Supongamos que el campo de estado se llama 'activo' y que es un booleano.
+    const puntosverdesActivos = await db.tb_puntos_verdes.findAll({
+      where: {
+        estado: true
+      }
+    });
+    res.status(200).json(puntosverdesActivos);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/inactivos', async (req, res) => {
+  try {
+    // Supongamos que el campo de estado se llama 'activo' y que es un booleano.
+    const puntosverdesActivos = await db.tb_puntos_verdes.findAll({
+      where: {
+        estado: false
+      }
+    });
+    res.status(200).json(puntosverdesActivos);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 //Obtener una direccion a partir de latitud y longitud
 router.get('/geocode', async (req, res) => {
   const { lat, lng } = req.query;
