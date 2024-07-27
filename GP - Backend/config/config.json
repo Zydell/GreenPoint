@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "postgres",
-    "password": "AndyAllaica2002",
+    "password": "123321",
     "database": "db_greenpoint",
     "host": "localhost",
     "dialect": "postgres"
