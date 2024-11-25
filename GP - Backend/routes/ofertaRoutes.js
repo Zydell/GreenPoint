@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
 // Get active ofertas
 router.get('/active', async (req, res) => {
   try {
-    //await updateOfferStates();
+    await updateOfferStates();
     const ofertas = await db.tb_ofertas.findAll({ where: { estado: true } });
     if (ofertas && ofertas.length > 0) {
       const ofertasConNegocio = await Promise.all(ofertas.map(async (oferta) => {
